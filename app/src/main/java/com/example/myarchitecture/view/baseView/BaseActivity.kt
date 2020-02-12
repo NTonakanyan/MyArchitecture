@@ -1,4 +1,4 @@
-package com.example.myarchitecture.view
+package com.example.myarchitecture.view.baseView
 
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity

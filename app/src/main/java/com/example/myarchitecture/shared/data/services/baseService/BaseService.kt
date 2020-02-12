@@ -1,10 +1,10 @@
-package com.example.myarchitecture.shared.data.services.root
+package com.example.myarchitecture.shared.data.services.baseService
 
 import com.example.myarchitecture.App
-import com.example.myarchitecture.model.ResponseModel
+import com.example.myarchitecture.model.baseModels.ResponseModel
 import com.example.myarchitecture.shared.data.networking.ExceptionHandler
 import com.example.myarchitecture.shared.data.networking.NetworkState
-import com.example.myarchitecture.shared.utils.NetworkStatusUtils
+import com.example.myarchitecture.shared.data.networking.NetworkAvailable
 import retrofit2.Response
 import java.net.HttpURLConnection
 import javax.inject.Inject
@@ -39,7 +39,7 @@ open class BaseService {
             }
             return response.body()!!.data
         } catch (e: Throwable) {
-            if (NetworkStatusUtils.isNetworkAvailable())
+            if (NetworkAvailable.isNetworkAvailable())
                 exceptionHandler.onError(NetworkState.SERVER_ERROR)
             else
                 exceptionHandler.onError(NetworkState.NETWORK_ERROR)

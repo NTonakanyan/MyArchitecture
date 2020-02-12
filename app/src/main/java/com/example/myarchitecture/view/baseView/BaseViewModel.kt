@@ -1,4 +1,4 @@
-package com.example.myarchitecture.view
+package com.example.myarchitecture.view.baseView
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData

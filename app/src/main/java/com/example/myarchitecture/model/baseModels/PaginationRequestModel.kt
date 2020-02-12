@@ -1,4 +1,4 @@
-package com.example.myarchitecture.model
+package com.example.myarchitecture.model.baseModels
 
 class PaginationRequestModel {
     var page: Int? = null

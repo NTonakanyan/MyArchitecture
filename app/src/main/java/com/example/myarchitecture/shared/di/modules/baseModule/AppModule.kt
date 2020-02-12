@@ -1,4 +1,4 @@
-package com.example.myarchitecture.shared.di.modules.root
+package com.example.myarchitecture.shared.di.modules.baseModule
 
 import android.app.Application
 import android.content.Context

@@ -1,4 +1,4 @@
-package com.example.myarchitecture.model
+package com.example.myarchitecture.model.baseModels
 
 class ResponseModel<T> {
     val success: Boolean? = false

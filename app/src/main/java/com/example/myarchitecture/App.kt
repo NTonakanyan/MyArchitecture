@@ -4,11 +4,11 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Intent
 import com.example.myarchitecture.shared.di.components.PersonComponent
-import com.example.myarchitecture.shared.di.components.root.DaggerAppComponent
-import com.example.myarchitecture.shared.di.components.root.AppComponent
+import com.example.myarchitecture.shared.di.components.baseComponent.DaggerAppComponent
+import com.example.myarchitecture.shared.di.components.baseComponent.AppComponent
 import com.example.myarchitecture.shared.di.modules.PersonModule
-import com.example.myarchitecture.shared.di.modules.root.AppModule
-import com.example.myarchitecture.shared.di.modules.root.NetModule
+import com.example.myarchitecture.shared.di.modules.baseModule.AppModule
+import com.example.myarchitecture.shared.di.modules.baseModule.NetModule
 import com.example.myarchitecture.shared.helpers.SharedPreferencesHelper
 import com.example.myarchitecture.view.mainActivity.MainActivity
 

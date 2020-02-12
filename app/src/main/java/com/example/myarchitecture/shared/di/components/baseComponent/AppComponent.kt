@@ -1,4 +1,4 @@
-package com.example.myarchitecture.shared.di.components.root
+package com.example.myarchitecture.shared.di.components.baseComponent
 
 import android.content.Context
 import android.content.res.Resources
@@ -7,8 +7,8 @@ import com.example.myarchitecture.shared.di.components.AuthorizationComponent
 import com.example.myarchitecture.shared.di.components.PersonComponent
 import com.example.myarchitecture.shared.di.modules.AuthorizationModule
 import com.example.myarchitecture.shared.di.modules.PersonModule
-import com.example.myarchitecture.shared.di.modules.root.AppModule
-import com.example.myarchitecture.shared.di.modules.root.NetModule
+import com.example.myarchitecture.shared.di.modules.baseModule.AppModule
+import com.example.myarchitecture.shared.di.modules.baseModule.NetModule
 import com.example.myarchitecture.shared.helpers.SharedPreferencesHelper
 import dagger.Component
 import retrofit2.Retrofit

@@ -9,7 +9,7 @@ import com.example.myarchitecture.R
 import com.example.myarchitecture.databinding.MainBinding
 import com.example.myarchitecture.model.notificationModels.NotificationModel
 import com.example.myarchitecture.shared.data.networking.NetworkState
-import com.example.myarchitecture.view.BaseActivity
+import com.example.myarchitecture.view.baseView.BaseActivity
 import com.example.myarchitecture.view.adapters.NotificationAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 

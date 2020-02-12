@@ -1,8 +1,8 @@
-package com.example.myarchitecture.shared.utils
+package com.example.myarchitecture.shared.data.networking
 
 import java.net.InetAddress
 
-object NetworkStatusUtils {
+object NetworkAvailable {
     fun isNetworkAvailable(): Boolean {
         return try {
             val ipAddress = InetAddress.getByName("google.com")

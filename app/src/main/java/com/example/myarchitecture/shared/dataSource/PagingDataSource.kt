@@ -2,8 +2,8 @@ package com.example.myarchitecture.shared.dataSource
 
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
-import com.example.myarchitecture.model.PaginationRequestModel
-import com.example.myarchitecture.model.PaginationResponseModel
+import com.example.myarchitecture.model.baseModels.PaginationRequestModel
+import com.example.myarchitecture.model.baseModels.PaginationResponseModel
 import com.example.myarchitecture.shared.data.networking.NetworkState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
@@ -13,7 +13,6 @@ import kotlin.coroutines.EmptyCoroutineContext
 class PagingDataSource<T>(private val scope: CoroutineScope,
                           private val pagingStateLiveData: MutableLiveData<NetworkState>,
                           private val method: suspend () -> PaginationResponseModel<List<T>>?) : PageKeyedDataSource<Int, T>() {
-
 
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, T>) {
         pagingStateLiveData.postValue(NetworkState.LOADING)
