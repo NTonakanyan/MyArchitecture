@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
-My Architecture for Android applications. Build based on MVVM
+My Architecture for Android applications.
 
 # Usage library
   - Dagger2
