@@ -3,9 +3,9 @@ package com.example.myarchitecture
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Intent
-import com.example.myarchitecture.shared.di.components.IPersonComponent
-import com.example.myarchitecture.shared.di.components.root.DaggerIAppComponent
-import com.example.myarchitecture.shared.di.components.root.IAppComponent
+import com.example.myarchitecture.shared.di.components.PersonComponent
+import com.example.myarchitecture.shared.di.components.root.DaggerAppComponent
+import com.example.myarchitecture.shared.di.components.root.AppComponent
 import com.example.myarchitecture.shared.di.modules.PersonModule
 import com.example.myarchitecture.shared.di.modules.root.AppModule
 import com.example.myarchitecture.shared.di.modules.root.NetModule
@@ -14,7 +14,7 @@ import com.example.myarchitecture.view.mainActivity.MainActivity
 
 class App : Application() {
 
-    private lateinit var mAppComponent: IAppComponent
+    private lateinit var mAppComponent: AppComponent
     companion object {
         lateinit var instance: App
     }
@@ -24,13 +24,13 @@ class App : Application() {
         super.onCreate()
         instance = this
 
-        mAppComponent = DaggerIAppComponent.builder()
+        mAppComponent = DaggerAppComponent.builder()
             .appModule(AppModule(this))
             .netModule(NetModule())
             .build()
     }
 
-    fun getPersonComponent(): IPersonComponent {
+    fun getPersonComponent(): PersonComponent {
         return mAppComponent.iPersonComponent(PersonModule())
     }
 

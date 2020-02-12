@@ -3,8 +3,8 @@ package com.example.myarchitecture.shared.di.components.root
 import android.content.Context
 import android.content.res.Resources
 import com.example.myarchitecture.shared.data.networking.ExceptionHandler
-import com.example.myarchitecture.shared.di.components.IAuthorizationComponent
-import com.example.myarchitecture.shared.di.components.IPersonComponent
+import com.example.myarchitecture.shared.di.components.AuthorizationComponent
+import com.example.myarchitecture.shared.di.components.PersonComponent
 import com.example.myarchitecture.shared.di.modules.AuthorizationModule
 import com.example.myarchitecture.shared.di.modules.PersonModule
 import com.example.myarchitecture.shared.di.modules.root.AppModule
@@ -16,7 +16,7 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [AppModule::class, NetModule::class])
-interface IAppComponent {
+interface AppComponent {
     fun myBackendRetrofit(): Retrofit
 
     fun context(): Context
@@ -25,9 +25,9 @@ interface IAppComponent {
 
     fun sharedPreferences(): SharedPreferencesHelper
 
-    fun iAuthorizationComponent(module: AuthorizationModule): IAuthorizationComponent
+    fun iAuthorizationComponent(module: AuthorizationModule): AuthorizationComponent
 
-    fun iPersonComponent(module: PersonModule): IPersonComponent
+    fun iPersonComponent(module: PersonModule): PersonComponent
 
     fun exceptionHandler(): ExceptionHandler
 }

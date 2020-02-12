@@ -6,5 +6,6 @@ import dagger.Subcomponent
 
 @AuthorizationScope
 @Subcomponent(modules = [AuthorizationModule::class])
-interface IAuthorizationComponent {
+interface AuthorizationComponent {
+
 }

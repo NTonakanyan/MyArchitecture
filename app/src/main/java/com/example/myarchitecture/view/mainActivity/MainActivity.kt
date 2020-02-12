@@ -6,7 +6,7 @@ import androidx.lifecycle.Observer
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myarchitecture.R
-import com.example.myarchitecture.databinding.ResultProfileBinding
+import com.example.myarchitecture.databinding.MainBinding
 import com.example.myarchitecture.model.notificationModels.NotificationModel
 import com.example.myarchitecture.shared.data.networking.NetworkState
 import com.example.myarchitecture.view.BaseActivity
@@ -15,14 +15,14 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity() {
 
-    private lateinit var mBinding: ResultProfileBinding
+    private lateinit var mBinding: MainBinding
     private val viewModel: MainViewModel by lazy { createViewModel(MainViewModel::class.java) }
-    private var mAdapter:NotificationAdapter?=null
+    private var mAdapter: NotificationAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        mBinding = ResultProfileBinding.inflate(layoutInflater)
+        mBinding = MainBinding.inflate(layoutInflater)
 
 //        viewModel.getLiveData()?.observe(this, Observer<List<NotificationModel>> {
 //            main_text.text = it?.size.toString()
