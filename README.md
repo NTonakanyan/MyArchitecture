@@ -13,4 +13,4 @@ My Architecture for Android applications.
 
 ### Todos
 
- - Evry time to best
+ - Every time to best
