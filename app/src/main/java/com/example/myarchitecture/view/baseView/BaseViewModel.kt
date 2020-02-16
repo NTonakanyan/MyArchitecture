@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myarchitecture.App
 import com.example.myarchitecture.shared.data.networking.ExceptionHandler
-import com.example.myarchitecture.shared.data.networking.NetworkState
+import com.example.myarchitecture.shared.data.networking.RequestState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -16,16 +16,16 @@ import kotlin.coroutines.CoroutineContext
 open class BaseViewModel : ViewModel() {
 
     @Inject
-    lateinit var exceptionHandler: ExceptionHandler
+    lateinit var mExceptionHandler: ExceptionHandler
     @Inject
     lateinit var context: Context
 
     init {
         App.instance.getPersonComponent().inject(this)
 
-        exceptionHandler.setOnExceptionHandler(object : ExceptionHandler.IExceptionHandler {
-            override fun onError(networkState: NetworkState?) {
-                mErrorLiveData.postValue(networkState)
+        mExceptionHandler.setOnExceptionHandler(object : ExceptionHandler.IExceptionHandler {
+            override fun onError(requestState: RequestState?) {
+                mErrorLiveData.postValue(requestState)
             }
         })
     }
@@ -36,7 +36,7 @@ open class BaseViewModel : ViewModel() {
     fun cancelAllRequests() = coroutineContext.cancel()
 
 
-    val mErrorLiveData = MutableLiveData<NetworkState>()
+    val mErrorLiveData = MutableLiveData<RequestState>()
 
 
 //    protected fun errorToast(errorMessage: String) {

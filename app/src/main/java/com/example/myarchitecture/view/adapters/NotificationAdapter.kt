@@ -8,13 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myarchitecture.databinding.FeedItemBinding
 import com.example.myarchitecture.databinding.NetworkItemBinding
 import com.example.myarchitecture.model.notificationModels.NotificationModel
-import com.example.myarchitecture.shared.data.networking.NetworkState
+import com.example.myarchitecture.shared.data.networking.RequestState
 
 class NotificationAdapter : PagedListAdapter<NotificationModel, RecyclerView.ViewHolder>(NotificationModel.DIFF_CALLBACK) {
 
     private val TYPE_PROGRESS = 0
     private val TYPE_ITEM = 1
-    private var mNetworkState: NetworkState? = null
+    private var mRequestState: RequestState? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -31,19 +31,19 @@ class NotificationAdapter : PagedListAdapter<NotificationModel, RecyclerView.Vie
         if (getItemViewType(position) == TYPE_ITEM) {
             (holder as ArticleItemViewHolder).bindTo(getItem(position))
         } else if (getItemViewType(position) == TYPE_PROGRESS) {
-            (holder as NetworkItemViewHolder).bindTo(mNetworkState)
+            (holder as NetworkItemViewHolder).bindTo(mRequestState)
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (mNetworkState == NetworkState.LOADING && position == itemCount - 1)
+        return if (position == itemCount - 1 && mRequestState?.status != RequestState.Status.SUCCESS)
             TYPE_PROGRESS
         else
             TYPE_ITEM
     }
 
-    fun setNetworkState(networkState: NetworkState) {
-        mNetworkState = networkState
+    fun setNetworkState(requestState: RequestState?) {
+        mRequestState = requestState
     }
 
     class ArticleItemViewHolder(private val binding: FeedItemBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -53,20 +53,13 @@ class NotificationAdapter : PagedListAdapter<NotificationModel, RecyclerView.Vie
     }
 
     class NetworkItemViewHolder(private val binding: NetworkItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bindTo(networkState: NetworkState?) {
-            if (networkState != null && networkState.status == NetworkState.Status.RUNNING) {
-                binding.progressBar.visibility = View.VISIBLE
-            } else {
+        fun bindTo(requestState: RequestState?) {
+            if (requestState?.status != RequestState.Status.LOADING) {
                 binding.progressBar.visibility = View.GONE
-            }
-
-
-            if (networkState != null && (networkState.status == NetworkState.Status.NETWORK_ERROR ||
-                            networkState.status == NetworkState.Status.SERVER_ERROR ||
-                            networkState.status == NetworkState.Status.API_ERROR)) {
                 binding.errorMsg.visibility = View.VISIBLE
-                binding.errorMsg.text = networkState.msg
+                binding.errorMsg.text = requestState?.msg
             } else {
+                binding.progressBar.visibility = View.VISIBLE
                 binding.errorMsg.visibility = View.GONE
             }
         }

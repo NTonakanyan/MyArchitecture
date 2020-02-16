@@ -1,41 +1,39 @@
 package com.example.myarchitecture.shared.dataSource
 
-import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
-import com.example.myarchitecture.model.baseModels.PaginationRequestModel
 import com.example.myarchitecture.model.baseModels.PaginationResponseModel
-import com.example.myarchitecture.shared.data.networking.NetworkState
+import com.example.myarchitecture.shared.data.networking.ExceptionHandler
+import com.example.myarchitecture.shared.data.networking.RequestState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
 import kotlin.coroutines.EmptyCoroutineContext
 
 class PagingDataSource<T>(private val scope: CoroutineScope,
-                          private val pagingStateLiveData: MutableLiveData<NetworkState>,
-                          private val method: suspend () -> PaginationResponseModel<List<T>>?) : PageKeyedDataSource<Int, T>() {
+                          private val requestStateLiveDate: ExceptionHandler,
+                          private val method: suspend (b: Boolean) -> PaginationResponseModel<List<T>>?) : PageKeyedDataSource<Int, T>() {
 
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, T>) {
-        pagingStateLiveData.postValue(NetworkState.LOADING)
         scope.launch(EmptyCoroutineContext, CoroutineStart.DEFAULT) {
-            val response = method()
+            requestStateLiveDate.onError(RequestState(true, RequestState.Status.LOADING, null))
+            val response = method(true)
             if (response?.data != null) {
-                callback.onResult(response.data, null, 2)
-                pagingStateLiveData.postValue(NetworkState.LOADED)
+                if (response.data.isEmpty())
+                    requestStateLiveDate.onError(RequestState(true, RequestState.Status.EMPTY, null))
+                callback.run { onResult(response.data, null, 2) }
+                requestStateLiveDate.onError(RequestState(true, RequestState.Status.SUCCESS, null))
             }
         }
     }
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, T>) {
-        pagingStateLiveData.postValue(NetworkState.LOADING)
         scope.launch(EmptyCoroutineContext, CoroutineStart.DEFAULT) {
-            val model = PaginationRequestModel()
-            model.page = params.key
-            model.count = params.requestedLoadSize
-            val response = method()
+            requestStateLiveDate.onError(RequestState(false, RequestState.Status.LOADING, null))
+            val response = method(false)
             if (response?.data != null) {
                 val nextKey = if (params.key == response.pageCount) null else params.key + 1
                 callback.onResult(response.data, nextKey)
-                pagingStateLiveData.postValue(NetworkState.LOADED)
+                requestStateLiveDate.onError(RequestState(false, RequestState.Status.SUCCESS, null))
             }
         }
     }

@@ -8,7 +8,7 @@ import com.example.myarchitecture.shared.data.services.baseService.BaseService
 
 class PersonService(private val mService: IPersonService) : BaseService() {
 
-    suspend fun getNotificationsList(model: PaginationRequestModel): PaginationResponseModel<List<NotificationModel>>? {
-        return callAsync { mService.getNotificationsList(model) }
+    suspend fun getNotificationsList(model: PaginationRequestModel, isMainRequest:Boolean): PaginationResponseModel<List<NotificationModel>>? {
+        return callAsync(isMainRequest) { mService.getNotificationsList(model) }
     }
 }

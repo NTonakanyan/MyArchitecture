@@ -9,15 +9,15 @@ class ExceptionHandler {
         mIExceptionHandler = iExceptionHandler
     }
 
-    fun onError(networkState: NetworkState?) {
-        if (networkState == NetworkState.UN_AUTHORIZATION_ERROR) {
+    fun onError(requestState: RequestState?) {
+        if (requestState == RequestState.createRequestState(RequestState.Status.UN_AUTHORIZATION_ERROR)) {
             App.instance.unAuthorization()
             return
         }
-        mIExceptionHandler.onError(networkState)
+        mIExceptionHandler.onError(requestState)
     }
 
     interface IExceptionHandler {
-        fun onError(networkState: NetworkState?)
+        fun onError(requestState: RequestState?)
     }
 }

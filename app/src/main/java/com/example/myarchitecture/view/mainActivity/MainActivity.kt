@@ -1,16 +1,16 @@
 package com.example.myarchitecture.view.mainActivity
 
 import android.os.Bundle
-import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myarchitecture.R
 import com.example.myarchitecture.databinding.MainBinding
 import com.example.myarchitecture.model.notificationModels.NotificationModel
-import com.example.myarchitecture.shared.data.networking.NetworkState
-import com.example.myarchitecture.view.baseView.BaseActivity
+import com.example.myarchitecture.shared.data.networking.RequestState
 import com.example.myarchitecture.view.adapters.NotificationAdapter
+import com.example.myarchitecture.view.baseView.BaseActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity() {
@@ -21,8 +21,7 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        mBinding = MainBinding.inflate(layoutInflater)
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
 //        viewModel.getLiveData()?.observe(this, Observer<List<NotificationModel>> {
 //            main_text.text = it?.size.toString()
@@ -39,12 +38,26 @@ class MainActivity : BaseActivity() {
             mAdapter?.submitList(it)
         })
 
-        viewModel.getPaginationLiveData()?.observe(this, Observer<NetworkState> {
-            mAdapter?.setNetworkState(it)
-        })
-
-        viewModel.mErrorLiveData.observe(this, Observer<NetworkState> {
-            Toast.makeText(this, it.msg, Toast.LENGTH_LONG).show()
+        viewModel.mErrorLiveData.observe(this, Observer<RequestState?> {
+            if (it != null)
+                if (!it.isRootLoading) {
+                    mAdapter?.setNetworkState(it)
+                } else {
+                    when (it.status) {
+                        RequestState.Status.EMPTY ->
+                            mBinding.mainStateLayout.showEmpty()
+                        RequestState.Status.NETWORK_ERROR ->
+                            mBinding.mainStateLayout.showNetworkError()
+                        RequestState.Status.SERVER_ERROR ->
+                            mBinding.mainStateLayout.showServerError()
+                        RequestState.Status.API_ERROR ->
+                            mBinding.mainStateLayout.showServerError()
+                        RequestState.Status.LOADING ->
+                            mBinding.mainStateLayout.showLoading()
+                        RequestState.Status.SUCCESS ->
+                            mBinding.mainStateLayout.showContent()
+                    }
+                }
         })
     }
 
