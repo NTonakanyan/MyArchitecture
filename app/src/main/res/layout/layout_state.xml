@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data class="StateLayoutBinding"/>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/layout_state_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        tools:ignore="ContentDescription">
+
+        <ProgressBar
+            android:visibility="gone"
+            android:id="@+id/layout_state_progress"
+            style="@style/stfProgress"/>
+
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/layout_state_image"
+            style="@style/stfImage"/>
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/layout_state_title"
+            style="@style/stfMessage" />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/layout_state_message"
+            style="@style/stfMessage" />
+
+        <Button
+            android:visibility="gone"
+            android:id="@+id/layout_state_button"
+            style="@style/stfButton" />
+
+    </LinearLayout>
+
+</layout>
