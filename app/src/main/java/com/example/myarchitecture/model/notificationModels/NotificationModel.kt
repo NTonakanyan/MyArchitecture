@@ -25,9 +25,9 @@ class NotificationModel {
         }
     }
 
-    override fun equals(obj: Any?): Boolean {
-        if (obj === this) return true
-        val article: NotificationModel = obj as NotificationModel
+    override fun equals(other: Any?): Boolean {
+        if (other === this) return true
+        val article: NotificationModel = other as NotificationModel
         return article.id == this.id
     }
 

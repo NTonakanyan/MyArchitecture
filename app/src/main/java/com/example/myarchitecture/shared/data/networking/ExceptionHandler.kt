@@ -1,7 +1,5 @@
 package com.example.myarchitecture.shared.data.networking
 
-import com.example.myarchitecture.App
-
 class ExceptionHandler {
     lateinit var mIExceptionHandler: IExceptionHandler
 
@@ -10,10 +8,6 @@ class ExceptionHandler {
     }
 
     fun onError(requestState: RequestState?) {
-        if (requestState == RequestState.createRequestState(RequestState.Status.UN_AUTHORIZATION_ERROR)) {
-            App.instance.unAuthorization()
-            return
-        }
         mIExceptionHandler.onError(requestState)
     }
 

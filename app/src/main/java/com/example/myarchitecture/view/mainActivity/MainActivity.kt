@@ -38,26 +38,25 @@ class MainActivity : BaseActivity() {
             mAdapter?.submitList(it)
         })
 
-        viewModel.mErrorLiveData.observe(this, Observer<RequestState?> {
-            if (it != null)
-                if (!it.isRootLoading) {
-                    mAdapter?.setNetworkState(it)
-                } else {
-                    when (it.status) {
-                        RequestState.Status.EMPTY ->
-                            mBinding.mainStateLayout.showEmpty()
-                        RequestState.Status.NETWORK_ERROR ->
-                            mBinding.mainStateLayout.showNetworkError()
-                        RequestState.Status.SERVER_ERROR ->
-                            mBinding.mainStateLayout.showServerError()
-                        RequestState.Status.API_ERROR ->
-                            mBinding.mainStateLayout.showServerError()
-                        RequestState.Status.LOADING ->
-                            mBinding.mainStateLayout.showLoading()
-                        RequestState.Status.SUCCESS ->
-                            mBinding.mainStateLayout.showContent()
-                    }
+        viewModel.mErrorLiveData.observe(this, Observer<RequestState> {
+            if (!it.isRootLoading)
+                mAdapter?.setNetworkState(it)
+            else {
+                when (it.status) {
+                    RequestState.Status.EMPTY ->
+                        mBinding.mainStateLayout.showEmpty()
+                    RequestState.Status.NETWORK_ERROR ->
+                        mBinding.mainStateLayout.showNetworkError()
+                    RequestState.Status.SERVER_ERROR ->
+                        mBinding.mainStateLayout.showServerError()
+                    RequestState.Status.API_ERROR ->
+                        mBinding.mainStateLayout.showServerError()
+                    RequestState.Status.LOADING ->
+                        mBinding.mainStateLayout.showLoading()
+                    RequestState.Status.SUCCESS ->
+                        mBinding.mainStateLayout.showContent()
                 }
+            }
         })
     }
 

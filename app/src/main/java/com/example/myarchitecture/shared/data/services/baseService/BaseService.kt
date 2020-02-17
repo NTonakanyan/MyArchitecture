@@ -25,9 +25,9 @@ open class BaseService {
 
             if (!response.isSuccessful) {
                 if (response.code() == HttpURLConnection.HTTP_UNAUTHORIZED || response.code() == HttpURLConnection.HTTP_FORBIDDEN)
-                exceptionHandler.onError(RequestState.createRequestState(RequestState.Status.UN_AUTHORIZATION_ERROR,isMainRequest))
+                    App.instance.unAuthorization()
                 else
-                exceptionHandler.onError(RequestState.createRequestState(RequestState.Status.SERVER_ERROR,isMainRequest))
+                    exceptionHandler.onError(RequestState.createRequestState(RequestState.Status.SERVER_ERROR, isMainRequest))
                 return null
             }
             if (!response.body()?.success!!) {
@@ -38,13 +38,13 @@ open class BaseService {
                 exceptionHandler.onError(RequestState(isMainRequest, RequestState.Status.API_ERROR, message))
                 return null
             }
-            exceptionHandler.onError(RequestState.createRequestState(RequestState.Status.SUCCESS,isMainRequest))
+            exceptionHandler.onError(RequestState.createRequestState(RequestState.Status.SUCCESS, isMainRequest))
             return response.body()!!.data
         } catch (e: Throwable) {
             if (NetworkAvailable.isNetworkAvailable())
-                exceptionHandler.onError(RequestState.createRequestState(RequestState.Status.SERVER_ERROR,isMainRequest))
+                exceptionHandler.onError(RequestState.createRequestState(RequestState.Status.SERVER_ERROR, isMainRequest))
             else
-                exceptionHandler.onError(RequestState.createRequestState(RequestState.Status.NETWORK_ERROR,isMainRequest))
+                exceptionHandler.onError(RequestState.createRequestState(RequestState.Status.NETWORK_ERROR, isMainRequest))
             return null
         }
     }

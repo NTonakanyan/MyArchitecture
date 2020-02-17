@@ -3,7 +3,6 @@ package com.example.myarchitecture.shared.data.networking
 open class RequestState(val isRootLoading: Boolean = false, val status: Status, val msg: String?) {
 
     enum class Status {
-        UN_AUTHORIZATION_ERROR,
         NETWORK_ERROR,
         SERVER_ERROR,
         API_ERROR,
@@ -15,7 +14,6 @@ open class RequestState(val isRootLoading: Boolean = false, val status: Status, 
     companion object {
         fun createRequestState(status: Status,isMainRequest: Boolean = false): RequestState {
             return when (status) {
-                Status.UN_AUTHORIZATION_ERROR -> RequestState(isMainRequest, Status.UN_AUTHORIZATION_ERROR, "Un authorization error")
                 Status.NETWORK_ERROR -> RequestState(isMainRequest, Status.NETWORK_ERROR, "Network error")
                 Status.SERVER_ERROR -> RequestState(isMainRequest, Status.SERVER_ERROR, "Server error")
                 Status.API_ERROR -> RequestState(isMainRequest, Status.API_ERROR, "Api error")

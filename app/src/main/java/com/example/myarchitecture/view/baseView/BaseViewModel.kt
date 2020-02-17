@@ -34,10 +34,7 @@ open class BaseViewModel : ViewModel() {
     private val coroutineContext: CoroutineContext get() = parentJob + Dispatchers.Default
     protected val scope = CoroutineScope(coroutineContext)
     fun cancelAllRequests() = coroutineContext.cancel()
-
-
     val mErrorLiveData = MutableLiveData<RequestState>()
-
 
 //    protected fun errorToast(errorMessage: String) {
 //        mToastMessageLiveData.postValue(errorMessage)
