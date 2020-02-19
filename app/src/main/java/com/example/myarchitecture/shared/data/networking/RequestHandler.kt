@@ -1,6 +1,6 @@
 package com.example.myarchitecture.shared.data.networking
 
-class ExceptionHandler {
+class RequestHandler {
     lateinit var mIExceptionHandler: IExceptionHandler
 
     fun setOnExceptionHandler(iExceptionHandler: IExceptionHandler) {

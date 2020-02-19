@@ -2,7 +2,7 @@ package com.example.myarchitecture.shared.di.components.baseComponent
 
 import android.content.Context
 import android.content.res.Resources
-import com.example.myarchitecture.shared.data.networking.ExceptionHandler
+import com.example.myarchitecture.shared.data.networking.RequestHandler
 import com.example.myarchitecture.shared.di.components.AuthorizationComponent
 import com.example.myarchitecture.shared.di.components.PersonComponent
 import com.example.myarchitecture.shared.di.modules.AuthorizationModule
@@ -29,5 +29,5 @@ interface AppComponent {
 
     fun iPersonComponent(module: PersonModule): PersonComponent
 
-    fun exceptionHandler(): ExceptionHandler
+    fun exceptionHandler(): RequestHandler
 }

@@ -2,22 +2,17 @@ package com.example.myarchitecture.view.mainActivity
 
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
-import androidx.paging.PagedList
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.example.myarchitecture.R
 import com.example.myarchitecture.databinding.MainBinding
-import com.example.myarchitecture.model.notificationModels.NotificationModel
-import com.example.myarchitecture.shared.data.networking.RequestState
-import com.example.myarchitecture.view.adapters.NotificationAdapter
 import com.example.myarchitecture.view.baseView.BaseActivity
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity() {
 
     private lateinit var mBinding: MainBinding
-    private val viewModel: MainViewModel by lazy { createViewModel(MainViewModel::class.java) }
-    private var mAdapter: NotificationAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,41 +23,13 @@ class MainActivity : BaseActivity() {
 //        })
 //        viewModel.api()
 
-        initSubscribers()
-
-        initAdapter()
+        initView()
     }
 
-    private fun initSubscribers() {
-        viewModel.getNotificationLiveData()?.observe(this, Observer<PagedList<NotificationModel>> {
-            mAdapter?.submitList(it)
-        })
-
-        viewModel.mErrorLiveData.observe(this, Observer<RequestState> {
-            if (!it.isRootLoading)
-                mAdapter?.setNetworkState(it)
-            else {
-                when (it.status) {
-                    RequestState.Status.EMPTY ->
-                        mBinding.mainStateLayout.showEmpty()
-                    RequestState.Status.NETWORK_ERROR ->
-                        mBinding.mainStateLayout.showNetworkError()
-                    RequestState.Status.SERVER_ERROR ->
-                        mBinding.mainStateLayout.showServerError()
-                    RequestState.Status.API_ERROR ->
-                        mBinding.mainStateLayout.showServerError()
-                    RequestState.Status.LOADING ->
-                        mBinding.mainStateLayout.showLoading()
-                    RequestState.Status.SUCCESS ->
-                        mBinding.mainStateLayout.showContent()
-                }
-            }
-        })
-    }
-
-    private fun initAdapter() {
-        mAdapter = NotificationAdapter()
-        main_recycler_view.layoutManager = LinearLayoutManager(this)
-        main_recycler_view.adapter = mAdapter
+    private fun initView() {
+        val navController = findNavController(R.id.main_fragment)
+        val appBarConfiguration = AppBarConfiguration(setOf(R.id.navigation_home, R.id.navigation_announcement))
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        mBinding.mainNavigation.setupWithNavController(navController)
     }
 }

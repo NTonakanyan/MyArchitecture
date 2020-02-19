@@ -5,24 +5,27 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.example.myarchitecture.databinding.AnnouncementItemBinding
 import com.example.myarchitecture.databinding.NetworkItemBinding
-import com.example.myarchitecture.databinding.NotificationItemBinding
-import com.example.myarchitecture.model.notificationModels.NotificationModel
+import com.example.myarchitecture.model.announcementModels.AnnouncementModel
 import com.example.myarchitecture.shared.data.networking.RequestState
 
-class NotificationAdapter : PagedListAdapter<NotificationModel, RecyclerView.ViewHolder>(NotificationModel.DIFF_CALLBACK) {
+class AnnouncementAdapter : PagedListAdapter<AnnouncementModel, RecyclerView.ViewHolder>(AnnouncementModel.DIFF_CALLBACK) {
 
     companion object {
         private const val TYPE_PROGRESS = 0
         private const val TYPE_ITEM = 1
     }
+
     private var mRequestState: RequestState? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return if (viewType == TYPE_ITEM) {
-            val itemBinding = NotificationItemBinding.inflate(layoutInflater, parent, false)
-            NotificationItemViewHolder(itemBinding)
+            val itemBinding = AnnouncementItemBinding.inflate(layoutInflater, parent, false)
+            AnnouncementItemViewHolder(itemBinding)
         } else {
             val itemBinding = NetworkItemBinding.inflate(layoutInflater, parent, false)
             NetworkItemViewHolder(itemBinding)
@@ -31,7 +34,7 @@ class NotificationAdapter : PagedListAdapter<NotificationModel, RecyclerView.Vie
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (getItemViewType(position) == TYPE_ITEM) {
-            (holder as NotificationItemViewHolder).bindTo(getItem(position))
+            (holder as AnnouncementItemViewHolder).bindTo(getItem(position))
         } else if (getItemViewType(position) == TYPE_PROGRESS) {
             (holder as NetworkItemViewHolder).bindTo(mRequestState)
         }
@@ -48,9 +51,14 @@ class NotificationAdapter : PagedListAdapter<NotificationModel, RecyclerView.Vie
         mRequestState = requestState
     }
 
-    class NotificationItemViewHolder(private val binding: NotificationItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bindTo(model: NotificationModel?) {
-            binding.itemFeedText.text = model?.title
+    class AnnouncementItemViewHolder(private val binding: AnnouncementItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bindTo(model: AnnouncementModel?) {
+            binding.itemAnnouncementTitle.text = model?.title
+            binding.itemAnnouncementDescription.text = model?.description
+            Glide.with(binding.itemAnnouncementImage.context)
+                .load(model?.photo?.photo)
+                .apply(RequestOptions().centerCrop())
+                .into(binding.itemAnnouncementImage)
         }
     }
 
