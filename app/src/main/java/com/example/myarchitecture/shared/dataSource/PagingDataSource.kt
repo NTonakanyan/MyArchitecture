@@ -20,23 +20,22 @@ class PagingDataSource<T>(private val mScope: CoroutineScope,
 
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, T>) {
         mScope.launch(EmptyCoroutineContext, CoroutineStart.DEFAULT) {
-            mRequestHandler.onError(RequestState(true, RequestState.Status.LOADING, null))
             val model = PaginationRequestModel()
             model.page = 1
             model.count = params.requestedLoadSize
             val response = mMethod(model, true)
             if (response?.data != null) {
-                if (response.data.isEmpty())
-                    mRequestHandler.onError(RequestState(true, RequestState.Status.EMPTY, null))
                 callback.run { onResult(response.data, null, FIRST_PAGE) }
-                mRequestHandler.onError(RequestState(true, RequestState.Status.SUCCESS, null))
+                if (response.data.isEmpty())
+                    mRequestHandler.postAction(RequestState(true, RequestState.Status.EMPTY, null))
+                else
+                    mRequestHandler.postAction(RequestState(true, RequestState.Status.SUCCESS, null))
             }
         }
     }
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, T>) {
         mScope.launch(EmptyCoroutineContext, CoroutineStart.DEFAULT) {
-            mRequestHandler.onError(RequestState(false, RequestState.Status.LOADING, null))
             val model = PaginationRequestModel()
             model.page = params.key
             model.count = params.requestedLoadSize
@@ -44,7 +43,6 @@ class PagingDataSource<T>(private val mScope: CoroutineScope,
             if (response?.data != null) {
                 val nextKey = if (params.key == response.pageCount) null else params.key + 1
                 callback.onResult(response.data, nextKey)
-                mRequestHandler.onError(RequestState(false, RequestState.Status.SUCCESS, null))
             }
         }
     }

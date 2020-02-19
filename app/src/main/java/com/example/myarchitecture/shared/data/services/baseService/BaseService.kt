@@ -20,14 +20,14 @@ open class BaseService {
 
     suspend fun <T> callAsync(isMainRequest: Boolean, method: suspend () -> Response<ResponseModel<T>>): T? {
         try {
-            mRequestHandler.onError(RequestState(isMainRequest, RequestState.Status.LOADING, null))
+            mRequestHandler.postAction(RequestState(isMainRequest, RequestState.Status.LOADING, null))
             val response = method()
 
             if (!response.isSuccessful) {
                 if (response.code() == HttpURLConnection.HTTP_UNAUTHORIZED || response.code() == HttpURLConnection.HTTP_FORBIDDEN)
                     App.instance.unAuthorization()
                 else
-                    mRequestHandler.onError(RequestState.createRequestState(RequestState.Status.SERVER_ERROR, isMainRequest))
+                    mRequestHandler.postAction(RequestState.createRequestState(RequestState.Status.SERVER_ERROR, isMainRequest))
                 return null
             }
             if (!response.body()?.success!!) {
@@ -35,16 +35,16 @@ open class BaseService {
                 val messages = response.body()?.messages
                 if (messages != null && messages.isNotEmpty())
                     message = messages[0].value
-                mRequestHandler.onError(RequestState(isMainRequest, RequestState.Status.API_ERROR, message))
+                mRequestHandler.postAction(RequestState(isMainRequest, RequestState.Status.API_ERROR, message))
                 return null
             }
-            mRequestHandler.onError(RequestState.createRequestState(RequestState.Status.SUCCESS, isMainRequest))
+            mRequestHandler.postAction(RequestState.createRequestState(RequestState.Status.SUCCESS, isMainRequest))
             return response.body()!!.data
         } catch (e: Throwable) {
             if (NetworkAvailable.isNetworkAvailable())
-                mRequestHandler.onError(RequestState.createRequestState(RequestState.Status.SERVER_ERROR, isMainRequest))
+                mRequestHandler.postAction(RequestState.createRequestState(RequestState.Status.SERVER_ERROR, isMainRequest))
             else
-                mRequestHandler.onError(RequestState.createRequestState(RequestState.Status.NETWORK_ERROR, isMainRequest))
+                mRequestHandler.postAction(RequestState.createRequestState(RequestState.Status.NETWORK_ERROR, isMainRequest))
             return null
         }
     }

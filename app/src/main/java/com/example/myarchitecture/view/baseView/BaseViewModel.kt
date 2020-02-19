@@ -16,7 +16,6 @@ import com.example.myarchitecture.shared.dataSource.PagingDataSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
@@ -32,7 +31,7 @@ open class BaseViewModel : ViewModel() {
         App.instance.getPersonComponent().inject(this)
 
         mRequestHandler.setOnExceptionHandler(object : RequestHandler.IExceptionHandler {
-            override fun onError(requestState: RequestState?) {
+            override fun onChanged(requestState: RequestState?) {
                 mErrorLiveData.postValue(requestState)
             }
         })

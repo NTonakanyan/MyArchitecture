@@ -1,6 +1,7 @@
 package com.example.myarchitecture.view.mainActivity.fragments.peopleFragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,16 +18,16 @@ class AnnouncementFragment : BaseFragment() {
 
     private lateinit var mBinding: AnnouncementBinding
     private var mAdapter: AnnouncementAdapter? = null
-    private val mViewModel: AnnouncementViewModel by lazy { mActivity.createViewModel(AnnouncementViewModel::class.java) }
+    private val mViewModel: AnnouncementViewModel by lazy { createViewModel(AnnouncementViewModel::class.java) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = AnnouncementBinding.inflate(inflater, container, false)
 
         mViewModel.getAnnouncements()
 
-        initSubscribers()
-
         initAdapter()
+
+        initSubscribers()
 
         return mBinding.root
     }
@@ -37,6 +38,7 @@ class AnnouncementFragment : BaseFragment() {
         })
 
         mViewModel.mErrorLiveData.observe(this, Observer<RequestState> {
+            Log.e(it.isRootLoading.toString() + " ", it.status.toString())
             if (!it.isRootLoading)
                 mAdapter?.setNetworkState(it)
             else {

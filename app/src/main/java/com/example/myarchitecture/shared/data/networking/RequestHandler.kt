@@ -7,11 +7,11 @@ class RequestHandler {
         mIExceptionHandler = iExceptionHandler
     }
 
-    fun onError(requestState: RequestState?) {
-        mIExceptionHandler.onError(requestState)
+    fun postAction(requestState: RequestState?) {
+        mIExceptionHandler.onChanged(requestState)
     }
 
     interface IExceptionHandler {
-        fun onError(requestState: RequestState?)
+        fun onChanged(requestState: RequestState?)
     }
 }

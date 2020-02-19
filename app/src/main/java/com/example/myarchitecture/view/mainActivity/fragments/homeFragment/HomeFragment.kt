@@ -1,6 +1,7 @@
 package com.example.myarchitecture.view.mainActivity.fragments.homeFragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,27 +17,30 @@ import com.example.myarchitecture.view.baseView.BaseFragment
 class HomeFragment : BaseFragment() {
 
     private lateinit var mBinding: HomeBinding
-    private val mViewModel: HomeViewModel by lazy { mActivity.createViewModel(HomeViewModel::class.java) }
+    private val mViewModel: HomeViewModel by lazy { createViewModel(HomeViewModel::class.java) }
     private var mAdapter: NotificationAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = HomeBinding.inflate(inflater, container, false)
 
+
         mViewModel.getNotifications()
+
+        initAdapter()
 
         initSubscribers()
 
-        initAdapter()
 
         return mBinding.root
     }
 
     private fun initSubscribers() {
-        mViewModel.getNotificationLiveData()?.observe(this, Observer<PagedList<NotificationModel>> {
+        mViewModel.getNotificationLiveData()?.observe(viewLifecycleOwner, Observer<PagedList<NotificationModel>> {
             mAdapter?.submitList(it)
         })
 
-        mViewModel.mErrorLiveData.observe(this, Observer<RequestState> {
+        mViewModel.mErrorLiveData.observe(viewLifecycleOwner, Observer<RequestState> {
+            Log.e(it.isRootLoading.toString() + " ", it.status.toString())
             if (!it.isRootLoading)
                 mAdapter?.setNetworkState(it)
             else {
