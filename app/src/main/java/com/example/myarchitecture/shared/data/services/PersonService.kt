@@ -1,5 +1,6 @@
 package com.example.myarchitecture.shared.data.services
 
+import com.example.myarchitecture.model.announcementModels.AnnouncementDetailsModel
 import com.example.myarchitecture.model.announcementModels.AnnouncementModel
 import com.example.myarchitecture.model.baseModels.PaginationRequestModel
 import com.example.myarchitecture.model.baseModels.PaginationResponseModel
@@ -15,5 +16,9 @@ class PersonService(private val mService: IPersonService) : BaseService() {
 
     suspend fun getSuggestedAnnouncementList(model: PaginationRequestModel, isMainRequest:Boolean): PaginationResponseModel<List<AnnouncementModel>>? {
         return callAsync(isMainRequest) { mService.getSuggestedAnnouncement(model) }
+    }
+
+    suspend fun getAnnouncementDetails(id: Int?, isMainRequest:Boolean): AnnouncementDetailsModel? {
+        return callAsync(isMainRequest) { mService.getAnnouncementDetails(id) }
     }
 }

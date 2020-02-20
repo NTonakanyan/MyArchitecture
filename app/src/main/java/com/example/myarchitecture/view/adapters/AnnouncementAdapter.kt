@@ -20,6 +20,7 @@ class AnnouncementAdapter : PagedListAdapter<AnnouncementModel, RecyclerView.Vie
     }
 
     private var mRequestState: RequestState? = null
+    private var mListener: OnItemClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -34,7 +35,7 @@ class AnnouncementAdapter : PagedListAdapter<AnnouncementModel, RecyclerView.Vie
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (getItemViewType(position) == TYPE_ITEM) {
-            (holder as AnnouncementItemViewHolder).bindTo(getItem(position))
+            getItem(position)?.let { (holder as AnnouncementItemViewHolder).bindTo(it, mListener) }
         } else if (getItemViewType(position) == TYPE_PROGRESS) {
             (holder as NetworkItemViewHolder).bindTo(mRequestState)
         }
@@ -52,13 +53,14 @@ class AnnouncementAdapter : PagedListAdapter<AnnouncementModel, RecyclerView.Vie
     }
 
     class AnnouncementItemViewHolder(private val binding: AnnouncementItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bindTo(model: AnnouncementModel?) {
-            binding.itemAnnouncementTitle.text = model?.title
-            binding.itemAnnouncementDescription.text = model?.description
+        fun bindTo(model: AnnouncementModel, listener: OnItemClickListener?) {
+            binding.itemAnnouncementTitle.text = model.title
+            binding.itemAnnouncementDescription.text = model.description
             Glide.with(binding.itemAnnouncementImage.context)
-                .load(model?.photo?.photo)
+                .load(model.photo?.photo)
                 .apply(RequestOptions().centerCrop())
                 .into(binding.itemAnnouncementImage)
+            binding.root.setOnClickListener { listener?.onClick(model.id) }
         }
     }
 
@@ -73,5 +75,13 @@ class AnnouncementAdapter : PagedListAdapter<AnnouncementModel, RecyclerView.Vie
                 binding.errorMsg.visibility = View.GONE
             }
         }
+    }
+
+    interface OnItemClickListener {
+        fun onClick(id: Int)
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        mListener = listener
     }
 }

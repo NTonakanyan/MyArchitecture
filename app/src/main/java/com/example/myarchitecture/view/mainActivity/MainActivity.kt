@@ -18,11 +18,6 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-//        viewModel.getLiveData()?.observe(this, Observer<List<NotificationModel>> {
-//            main_text.text = it?.size.toString()
-//        })
-//        viewModel.api()
-
         initView()
     }
 
@@ -31,5 +26,10 @@ class MainActivity : BaseActivity() {
         val appBarConfiguration = AppBarConfiguration(setOf(R.id.navigation_home, R.id.navigation_announcement))
         setupActionBarWithNavController(navController, appBarConfiguration)
         mBinding.mainNavigation.setupWithNavController(navController)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }

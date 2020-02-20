@@ -5,11 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.myarchitecture.R
 import com.example.myarchitecture.databinding.AnnouncementBinding
 import com.example.myarchitecture.model.announcementModels.AnnouncementModel
 import com.example.myarchitecture.shared.data.networking.RequestState
+import com.example.myarchitecture.shared.utils.AppConstants
 import com.example.myarchitecture.view.adapters.AnnouncementAdapter
 import com.example.myarchitecture.view.baseView.BaseFragment
 
@@ -41,6 +44,14 @@ class AnnouncementFragment : BaseFragment() {
 
     private fun initAdapter() {
         mAdapter = AnnouncementAdapter()
+        mAdapter?.setOnItemClickListener(object : AnnouncementAdapter.OnItemClickListener {
+            override fun onClick(id: Int) {
+                val navController = Navigation.findNavController(mActivity, R.id.main_fragment)
+                val args = Bundle()
+                args.putInt(AppConstants.ID, id)
+                navController.navigate(R.id.action_announcement_to_announcement_details, args)
+            }
+        })
         mBinding.announcementRecyclerView.layoutManager = LinearLayoutManager(mActivity)
         mBinding.announcementRecyclerView.adapter = mAdapter
     }

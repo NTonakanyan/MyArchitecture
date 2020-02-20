@@ -29,7 +29,7 @@ open class BaseViewModel : ViewModel() {
     private val parentJob = Job()
     private val coroutineContext: CoroutineContext get() = parentJob + Dispatchers.Default
     val mRequestLiveData = MutableLiveData<RequestState>()
-    val scope = CoroutineScope(coroutineContext)
+    val mScope = CoroutineScope(coroutineContext)
 
     init {
         App.instance.getPersonComponent().inject(this)
@@ -44,7 +44,7 @@ open class BaseViewModel : ViewModel() {
     protected fun <T> initPaginationDataSours(method: suspend (PaginationRequestModel, Boolean) -> PaginationResponseModel<List<T>>?, loadedItemCount: Int = 5): LiveData<PagedList<T>>? {
         val notificationDataDataSourceCreator = object : DataSource.Factory<Int, T>() {
             override fun create(): DataSource<Int, T> {
-                return PagingDataSource(scope, mRequestHandler, method)
+                return PagingDataSource(mScope, mRequestHandler, method)
             }
         }
         val config = PagedList.Config.Builder()
@@ -54,5 +54,5 @@ open class BaseViewModel : ViewModel() {
         return LivePagedListBuilder<Int, T>(notificationDataDataSourceCreator, config).build()
     }
 
-    fun closeRequest() { scope.coroutineContext.cancel() }
+    fun closeRequest() { mScope.coroutineContext.cancel() }
 }

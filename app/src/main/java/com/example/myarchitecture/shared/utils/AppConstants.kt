@@ -14,6 +14,7 @@ object AppConstants {
      * Global
      */
     const val TOKEN = "Token"
+    const val ID = "Id"
 
     /**
      * Model key
