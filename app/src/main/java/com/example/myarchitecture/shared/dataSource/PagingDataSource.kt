@@ -15,7 +15,7 @@ class PagingDataSource<T>(private val mScope: CoroutineScope,
                           private val mMethod: suspend (model: PaginationRequestModel, isMainRequest: Boolean) -> PaginationResponseModel<List<T>>?) : PageKeyedDataSource<Int, T>() {
 
     companion object {
-        const val FIRST_PAGE = 4
+        const val NEXT_PAGE = 4 // because requested load size multiply 3
     }
 
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, T>) {
@@ -25,7 +25,7 @@ class PagingDataSource<T>(private val mScope: CoroutineScope,
             model.count = params.requestedLoadSize
             val response = mMethod(model, true)
             if (response?.data != null) {
-                callback.run { onResult(response.data, null, FIRST_PAGE) }
+                callback.run { onResult(response.data, null, NEXT_PAGE) }
                 if (response.data.isEmpty())
                     mRequestHandler.postAction(RequestState(true, RequestState.Status.EMPTY, null))
                 else

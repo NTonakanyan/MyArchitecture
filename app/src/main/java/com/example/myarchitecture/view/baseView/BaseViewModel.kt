@@ -16,6 +16,7 @@ import com.example.myarchitecture.shared.dataSource.PagingDataSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
@@ -25,21 +26,20 @@ open class BaseViewModel : ViewModel() {
     lateinit var mRequestHandler: RequestHandler
     @Inject
     lateinit var context: Context
-    val mErrorLiveData = MutableLiveData<RequestState>()
+    private val parentJob = Job()
+    private val coroutineContext: CoroutineContext get() = parentJob + Dispatchers.Default
+    val mRequestLiveData = MutableLiveData<RequestState>()
+    val scope = CoroutineScope(coroutineContext)
 
     init {
         App.instance.getPersonComponent().inject(this)
 
         mRequestHandler.setOnExceptionHandler(object : RequestHandler.IExceptionHandler {
             override fun onChanged(requestState: RequestState?) {
-                mErrorLiveData.postValue(requestState)
+                mRequestLiveData.postValue(requestState)
             }
         })
     }
-
-    private val parentJob = Job()
-    private val coroutineContext: CoroutineContext get() = parentJob + Dispatchers.Default
-    protected val scope = CoroutineScope(coroutineContext)
 
     protected fun <T> initPaginationDataSours(method: suspend (PaginationRequestModel, Boolean) -> PaginationResponseModel<List<T>>?, loadedItemCount: Int = 5): LiveData<PagedList<T>>? {
         val notificationDataDataSourceCreator = object : DataSource.Factory<Int, T>() {
@@ -53,4 +53,6 @@ open class BaseViewModel : ViewModel() {
             .build()
         return LivePagedListBuilder<Int, T>(notificationDataDataSourceCreator, config).build()
     }
+
+    fun closeRequest() { scope.coroutineContext.cancel() }
 }

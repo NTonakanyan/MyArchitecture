@@ -1,7 +1,6 @@
 package com.example.myarchitecture.view.mainActivity.fragments.homeFragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,42 +22,20 @@ class HomeFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = HomeBinding.inflate(inflater, container, false)
 
-
         mViewModel.getNotifications()
 
         initAdapter()
 
         initSubscribers()
 
-
         return mBinding.root
     }
 
     private fun initSubscribers() {
+        requestSubscriber(mViewModel, mBinding.homeStateLayout)
+
         mViewModel.getNotificationLiveData()?.observe(viewLifecycleOwner, Observer<PagedList<NotificationModel>> {
             mAdapter?.submitList(it)
-        })
-
-        mViewModel.mErrorLiveData.observe(viewLifecycleOwner, Observer<RequestState> {
-            Log.e(it.isRootLoading.toString() + " ", it.status.toString())
-            if (!it.isRootLoading)
-                mAdapter?.setNetworkState(it)
-            else {
-                when (it.status) {
-                    RequestState.Status.EMPTY ->
-                        mBinding.homeStateLayout.showEmpty()
-                    RequestState.Status.NETWORK_ERROR ->
-                        mBinding.homeStateLayout.showNetworkError()
-                    RequestState.Status.SERVER_ERROR ->
-                        mBinding.homeStateLayout.showServerError()
-                    RequestState.Status.API_ERROR ->
-                        mBinding.homeStateLayout.showServerError()
-                    RequestState.Status.LOADING ->
-                        mBinding.homeStateLayout.showLoading()
-                    RequestState.Status.SUCCESS ->
-                        mBinding.homeStateLayout.showContent()
-                }
-            }
         })
     }
 
@@ -66,5 +43,10 @@ class HomeFragment : BaseFragment() {
         mAdapter = NotificationAdapter()
         mBinding.mainRecyclerView.layoutManager = LinearLayoutManager(mActivity)
         mBinding.mainRecyclerView.adapter = mAdapter
+    }
+
+    override fun requestState(requestState: RequestState) {
+        if (!requestState.isRootLoading)
+            mAdapter?.setNetworkState(requestState)
     }
 }

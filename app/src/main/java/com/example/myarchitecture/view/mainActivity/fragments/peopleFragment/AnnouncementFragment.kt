@@ -1,7 +1,6 @@
 package com.example.myarchitecture.view.mainActivity.fragments.peopleFragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,30 +32,10 @@ class AnnouncementFragment : BaseFragment() {
     }
 
     private fun initSubscribers() {
-        mViewModel.getAnnouncementsLiveData()?.observe(this, Observer<PagedList<AnnouncementModel>> {
-            mAdapter?.submitList(it)
-        })
+        requestSubscriber(mViewModel, mBinding.announcementStateLayout)
 
-        mViewModel.mErrorLiveData.observe(this, Observer<RequestState> {
-            Log.e(it.isRootLoading.toString() + " ", it.status.toString())
-            if (!it.isRootLoading)
-                mAdapter?.setNetworkState(it)
-            else {
-                when (it.status) {
-                    RequestState.Status.EMPTY ->
-                        mBinding.announcementStateLayout.showEmpty()
-                    RequestState.Status.NETWORK_ERROR ->
-                        mBinding.announcementStateLayout.showNetworkError()
-                    RequestState.Status.SERVER_ERROR ->
-                        mBinding.announcementStateLayout.showServerError()
-                    RequestState.Status.API_ERROR ->
-                        mBinding.announcementStateLayout.showServerError()
-                    RequestState.Status.LOADING ->
-                        mBinding.announcementStateLayout.showLoading()
-                    RequestState.Status.SUCCESS ->
-                        mBinding.announcementStateLayout.showContent()
-                }
-            }
+        mViewModel.getAnnouncementsLiveData()?.observe(viewLifecycleOwner, Observer<PagedList<AnnouncementModel>> {
+            mAdapter?.submitList(it)
         })
     }
 
@@ -64,5 +43,10 @@ class AnnouncementFragment : BaseFragment() {
         mAdapter = AnnouncementAdapter()
         mBinding.announcementRecyclerView.layoutManager = LinearLayoutManager(mActivity)
         mBinding.announcementRecyclerView.adapter = mAdapter
+    }
+
+    override fun requestState(requestState: RequestState) {
+        if (!requestState.isRootLoading)
+            mAdapter?.setNetworkState(requestState)
     }
 }
