@@ -30,17 +30,4 @@ class AnnouncementViewModel : BaseViewModel() {
         val function: suspend (PaginationRequestModel, Boolean) -> PaginationResponseModel<List<AnnouncementModel>>? = { it1, it2 -> mService.getSuggestedAnnouncementList(it1, it2) }
         announcementsLiveData = initPaginationDataSours(function)
     }
-
-//    fun api() {
-//        scope.launch(EmptyCoroutineContext, CoroutineStart.DEFAULT) {
-//            val model = PaginationRequestModel()
-//            model.page = 1
-//            model.count = 5
-//            withContext(Dispatchers.Main) {
-//                val responseModel = mService.getNotificationsList(model, true)
-//                if (responseModel?.data != null)
-//                    liveData.postValue(responseModel.data)
-//            }
-//        }
-//    }
 }

@@ -5,14 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.example.myarchitecture.databinding.AnnouncementDetailsBinding
 import com.example.myarchitecture.shared.di.scopes.PersonScope
 import com.example.myarchitecture.shared.utils.AppConstants
 import com.example.myarchitecture.view.baseView.BaseFragment
 
-@PersonScope
 class AnnouncementDetailsFragment : BaseFragment() {
 
     private lateinit var mBinding: AnnouncementDetailsBinding
@@ -23,8 +21,7 @@ class AnnouncementDetailsFragment : BaseFragment() {
 
         initSubscribers()
 
-        val id = arguments?.getInt(AppConstants.ID)
-        mViewModel.getAnnouncementDetails(id)
+        mViewModel.getAnnouncementDetails(arguments?.getInt(AppConstants.ID))
 
         return mBinding.root
     }

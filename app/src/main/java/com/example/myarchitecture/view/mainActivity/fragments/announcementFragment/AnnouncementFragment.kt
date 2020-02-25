@@ -5,13 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myarchitecture.R
-import com.example.myarchitecture.databinding.AnnouncementBinding
+import com.example.myarchitecture.databinding.FragmentAnnouncementBinding
 import com.example.myarchitecture.model.announcementModels.AnnouncementModel
 import com.example.myarchitecture.shared.data.networking.RequestState
 import com.example.myarchitecture.shared.utils.AppConstants
@@ -20,12 +19,12 @@ import com.example.myarchitecture.view.baseView.BaseFragment
 
 class AnnouncementFragment : BaseFragment() {
 
-    private lateinit var mBinding: AnnouncementBinding
+    private lateinit var mBinding: FragmentAnnouncementBinding
     private val mViewModel by viewModels<AnnouncementViewModel>()
     private var mAdapter: AnnouncementAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mBinding = AnnouncementBinding.inflate(inflater, container, false)
+        mBinding = FragmentAnnouncementBinding.inflate(inflater, container, false)
         mViewModel.getAnnouncements()
 
         initAdapter()
