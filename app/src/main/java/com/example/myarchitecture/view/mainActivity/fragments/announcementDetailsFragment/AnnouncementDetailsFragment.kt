@@ -4,16 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.example.myarchitecture.databinding.AnnouncementDetailsBinding
+import com.example.myarchitecture.shared.di.scopes.PersonScope
 import com.example.myarchitecture.shared.utils.AppConstants
 import com.example.myarchitecture.view.baseView.BaseFragment
 
-
+@PersonScope
 class AnnouncementDetailsFragment : BaseFragment() {
 
     private lateinit var mBinding: AnnouncementDetailsBinding
-    private val mViewModel: AnnouncementDetailsViewModel by lazy { createViewModel(AnnouncementDetailsViewModel::class.java) }
+    private val mViewModel by viewModels<AnnouncementDetailsViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = AnnouncementDetailsBinding.inflate(inflater, container, false)

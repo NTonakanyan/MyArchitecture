@@ -11,7 +11,7 @@
 
     <fragment
         android:id="@+id/navigation_announcement"
-        android:name="com.example.myarchitecture.view.mainActivity.fragments.peopleFragment.AnnouncementFragment"
+        android:name="com.example.myarchitecture.view.mainActivity.fragments.announcementFragment.AnnouncementFragment"
         tools:layout="@layout/fragment_announcement">
         <action
             android:id="@+id/action_announcement_to_announcement_details"

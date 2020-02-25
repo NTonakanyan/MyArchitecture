@@ -6,7 +6,7 @@ import com.example.myarchitecture.shared.di.scopes.PersonScope
 import com.example.myarchitecture.view.baseView.BaseViewModel
 import com.example.myarchitecture.view.mainActivity.fragments.announcementDetailsFragment.AnnouncementDetailsViewModel
 import com.example.myarchitecture.view.mainActivity.fragments.homeFragment.HomeViewModel
-import com.example.myarchitecture.view.mainActivity.fragments.peopleFragment.AnnouncementViewModel
+import com.example.myarchitecture.view.mainActivity.fragments.announcementFragment.AnnouncementViewModel
 import dagger.Subcomponent
 
 @PersonScope

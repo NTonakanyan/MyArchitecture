@@ -1,9 +1,11 @@
-package com.example.myarchitecture.view.mainActivity.fragments.peopleFragment
+package com.example.myarchitecture.view.mainActivity.fragments.announcementFragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.paging.PagedList
@@ -19,12 +21,11 @@ import com.example.myarchitecture.view.baseView.BaseFragment
 class AnnouncementFragment : BaseFragment() {
 
     private lateinit var mBinding: AnnouncementBinding
+    private val mViewModel by viewModels<AnnouncementViewModel>()
     private var mAdapter: AnnouncementAdapter? = null
-    private val mViewModel: AnnouncementViewModel by lazy { createViewModel(AnnouncementViewModel::class.java) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = AnnouncementBinding.inflate(inflater, container, false)
-
         mViewModel.getAnnouncements()
 
         initAdapter()

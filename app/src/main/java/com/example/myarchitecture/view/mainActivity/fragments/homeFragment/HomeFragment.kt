@@ -4,24 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.myarchitecture.databinding.HomeBinding
-import com.example.myarchitecture.model.notificationModels.NotificationModel
+import com.example.myarchitecture.databinding.FragmentHomeBinding
 import com.example.myarchitecture.shared.data.networking.RequestState
 import com.example.myarchitecture.view.adapters.NotificationAdapter
 import com.example.myarchitecture.view.baseView.BaseFragment
 
 class HomeFragment : BaseFragment() {
 
-    private lateinit var mBinding: HomeBinding
-    private val mViewModel: HomeViewModel by lazy { createViewModel(HomeViewModel::class.java) }
+    private lateinit var mBinding: FragmentHomeBinding
+    private val mViewModel by viewModels<HomeViewModel>()
     private var mAdapter: NotificationAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mBinding = HomeBinding.inflate(inflater, container, false)
-
+        mBinding = FragmentHomeBinding.inflate(inflater, container, false)
         mViewModel.getNotifications()
 
         initAdapter()
@@ -34,7 +32,7 @@ class HomeFragment : BaseFragment() {
     private fun initSubscribers() {
         requestSubscriber(mViewModel, mBinding.homeStateLayout)
 
-        mViewModel.getNotificationLiveData()?.observe(viewLifecycleOwner, Observer<PagedList<NotificationModel>> {
+        mViewModel.getNotificationLiveData()?.observe(super.getViewLifecycleOwner(), Observer {
             mAdapter?.submitList(it)
         })
     }
@@ -48,5 +46,10 @@ class HomeFragment : BaseFragment() {
     override fun requestState(requestState: RequestState) {
         if (!requestState.isRootLoading)
             mAdapter?.setNetworkState(requestState)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mViewModel.getLiveData().removeObservers(viewLifecycleOwner)
     }
 }

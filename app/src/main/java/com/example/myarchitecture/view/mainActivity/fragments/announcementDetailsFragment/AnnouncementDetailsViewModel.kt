@@ -5,12 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import com.example.myarchitecture.App
 import com.example.myarchitecture.model.announcementModels.AnnouncementDetailsModel
 import com.example.myarchitecture.shared.data.services.PersonService
+import com.example.myarchitecture.shared.di.scopes.PersonScope
 import com.example.myarchitecture.view.baseView.BaseViewModel
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.coroutines.EmptyCoroutineContext
 
+@PersonScope
 class AnnouncementDetailsViewModel : BaseViewModel() {
 
     @Inject

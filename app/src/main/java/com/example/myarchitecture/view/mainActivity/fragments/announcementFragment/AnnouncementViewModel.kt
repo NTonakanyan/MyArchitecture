@@ -1,4 +1,4 @@
-package com.example.myarchitecture.view.mainActivity.fragments.peopleFragment
+package com.example.myarchitecture.view.mainActivity.fragments.announcementFragment
 
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
@@ -7,9 +7,11 @@ import com.example.myarchitecture.model.announcementModels.AnnouncementModel
 import com.example.myarchitecture.model.baseModels.PaginationRequestModel
 import com.example.myarchitecture.model.baseModels.PaginationResponseModel
 import com.example.myarchitecture.shared.data.services.PersonService
+import com.example.myarchitecture.shared.di.scopes.PersonScope
 import com.example.myarchitecture.view.baseView.BaseViewModel
 import javax.inject.Inject
 
+@PersonScope
 class AnnouncementViewModel : BaseViewModel() {
 
     @Inject

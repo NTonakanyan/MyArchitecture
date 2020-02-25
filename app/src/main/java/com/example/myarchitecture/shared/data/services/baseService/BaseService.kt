@@ -1,8 +1,8 @@
 package com.example.myarchitecture.shared.data.services.baseService
 
+import androidx.lifecycle.MutableLiveData
 import com.example.myarchitecture.App
 import com.example.myarchitecture.model.baseModels.ResponseModel
-import com.example.myarchitecture.shared.data.networking.RequestHandler
 import com.example.myarchitecture.shared.data.networking.NetworkAvailable
 import com.example.myarchitecture.shared.data.networking.RequestState
 import retrofit2.Response
@@ -12,7 +12,7 @@ import javax.inject.Inject
 open class BaseService {
 
     @Inject
-    lateinit var mRequestHandler: RequestHandler
+    lateinit var mRequestHandler: MutableLiveData<RequestState>
 
     init {
         App.instance.getPersonComponent().inject(this)
@@ -20,14 +20,14 @@ open class BaseService {
 
     suspend fun <T> callAsync(isMainRequest: Boolean, method: suspend () -> Response<ResponseModel<T>>): T? {
         try {
-            mRequestHandler.postAction(RequestState(isMainRequest, RequestState.Status.LOADING, null))
+            mRequestHandler.postValue(RequestState(isMainRequest, RequestState.Status.LOADING, null))
             val response = method()
 
             if (!response.isSuccessful) {
                 if (response.code() == HttpURLConnection.HTTP_UNAUTHORIZED || response.code() == HttpURLConnection.HTTP_FORBIDDEN)
                     App.instance.unAuthorization()
                 else
-                    mRequestHandler.postAction(RequestState.createRequestState(RequestState.Status.SERVER_ERROR, isMainRequest))
+                    mRequestHandler.postValue(RequestState.createRequestState(RequestState.Status.SERVER_ERROR, isMainRequest))
                 return null
             }
             if (!response.body()?.success!!) {
@@ -35,16 +35,16 @@ open class BaseService {
                 val messages = response.body()?.messages
                 if (messages != null && messages.isNotEmpty())
                     message = messages[0].value
-                mRequestHandler.postAction(RequestState(isMainRequest, RequestState.Status.API_ERROR, message))
+                mRequestHandler.postValue(RequestState(isMainRequest, RequestState.Status.API_ERROR, message))
                 return null
             }
-            mRequestHandler.postAction(RequestState.createRequestState(RequestState.Status.SUCCESS, isMainRequest))
+            mRequestHandler.postValue(RequestState.createRequestState(RequestState.Status.SUCCESS, isMainRequest))
             return response.body()!!.data
         } catch (e: Throwable) {
             if (NetworkAvailable.isNetworkAvailable())
-                mRequestHandler.postAction(RequestState.createRequestState(RequestState.Status.SERVER_ERROR, isMainRequest))
+                mRequestHandler.postValue(RequestState.createRequestState(RequestState.Status.SERVER_ERROR, isMainRequest))
             else
-                mRequestHandler.postAction(RequestState.createRequestState(RequestState.Status.NETWORK_ERROR, isMainRequest))
+                mRequestHandler.postValue(RequestState.createRequestState(RequestState.Status.NETWORK_ERROR, isMainRequest))
             return null
         }
     }

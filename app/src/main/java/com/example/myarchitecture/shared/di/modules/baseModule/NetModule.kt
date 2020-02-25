@@ -1,14 +1,16 @@
 package com.example.myarchitecture.shared.di.modules.baseModule
 
 import android.app.Application
+import androidx.lifecycle.MutableLiveData
 import com.example.myarchitecture.BuildConfig
 import com.example.myarchitecture.shared.data.networking.NetworkAvailable
-import com.example.myarchitecture.shared.data.networking.RequestHandler
+import com.example.myarchitecture.shared.data.networking.RequestState
 import com.example.myarchitecture.shared.helpers.SharedPreferencesHelper
 import com.example.myarchitecture.shared.utils.CommonUtils
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.readystatesoftware.chuck.ChuckInterceptor
 import dagger.Module
 import dagger.Provides
 import okhttp3.Cache
@@ -46,7 +48,7 @@ class NetModule {
     @Singleton
     internal fun provideOkHttpClient(cache: Cache, application: Application, shared: SharedPreferencesHelper): OkHttpClient {
         return OkHttpClient.Builder()
-//            .addInterceptor(ChuckInterceptor(application))
+            .addInterceptor(ChuckInterceptor(application))
             .addInterceptor(CustomInterceptor(shared, application))
             .cache(cache)
             .connectTimeout(60, TimeUnit.SECONDS)
@@ -67,8 +69,8 @@ class NetModule {
 
     @Provides
     @Singleton
-    internal fun provideExceptionHandler(): RequestHandler {
-        return RequestHandler()
+    internal fun provideMutableLiveData(): MutableLiveData<RequestState> {
+        return MutableLiveData()
     }
 
     inner class CustomInterceptor internal constructor(private val mShared: SharedPreferencesHelper,

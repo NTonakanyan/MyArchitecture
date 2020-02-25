@@ -1,9 +1,9 @@
 package com.example.myarchitecture.shared.dataSource
 
+import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
 import com.example.myarchitecture.model.baseModels.PaginationRequestModel
 import com.example.myarchitecture.model.baseModels.PaginationResponseModel
-import com.example.myarchitecture.shared.data.networking.RequestHandler
 import com.example.myarchitecture.shared.data.networking.RequestState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.EmptyCoroutineContext
 
 class PagingDataSource<T>(private val mScope: CoroutineScope,
-                          private val mRequestHandler: RequestHandler,
+                          private val mRequestHandler: MutableLiveData<RequestState>,
                           private val mMethod: suspend (model: PaginationRequestModel, isMainRequest: Boolean) -> PaginationResponseModel<List<T>>?) : PageKeyedDataSource<Int, T>() {
 
     companion object {
@@ -27,9 +27,9 @@ class PagingDataSource<T>(private val mScope: CoroutineScope,
             if (response?.data != null) {
                 callback.run { onResult(response.data, null, NEXT_PAGE) }
                 if (response.data.isEmpty())
-                    mRequestHandler.postAction(RequestState(true, RequestState.Status.EMPTY, null))
+                    mRequestHandler.postValue(RequestState(true, RequestState.Status.EMPTY, null))
                 else
-                    mRequestHandler.postAction(RequestState(true, RequestState.Status.SUCCESS, null))
+                    mRequestHandler.postValue(RequestState(true, RequestState.Status.SUCCESS, null))
             }
         }
     }
