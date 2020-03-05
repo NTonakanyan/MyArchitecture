@@ -8,23 +8,27 @@ import com.example.myarchitecture.shared.data.networking.RequestState
 open class BaseFragment : Fragment() {
 
     protected val mActivity: BaseActivity by lazy { requireActivity() as BaseActivity }
+    private var mViewModel: BaseViewModel? = null
 
     fun <T : BaseViewModel> requestSubscriber(viewModel: T, stateLayout: StateLayout) {
-        viewModel.getLiveData().observe(viewLifecycleOwner, Observer<RequestState> {
-            viewModel.getLiveData().removeObservers(viewLifecycleOwner)
-            viewModel.getLiveData().observe(viewLifecycleOwner, Observer {
-                requestState(it)
-                if (it.isRootLoading)
-                    when (it.status) {
-                        RequestState.Status.EMPTY -> stateLayout.showEmpty()
-                        RequestState.Status.NETWORK_ERROR -> stateLayout.showNetworkError()
-                        RequestState.Status.SERVER_ERROR -> stateLayout.showServerError()
-                        RequestState.Status.API_ERROR -> stateLayout.showServerError()
-                        RequestState.Status.LOADING -> stateLayout.showLoading()
-                        RequestState.Status.SUCCESS -> stateLayout.showContent()
-                    }
-            })
+        mViewModel = viewModel
+        viewModel.getLiveData().observe(viewLifecycleOwner, Observer {
+            requestState(it)
+            if (it.isRootLoading)
+                when (it.status) {
+                    RequestState.Status.EMPTY -> stateLayout.showEmpty()
+                    RequestState.Status.NETWORK_ERROR -> stateLayout.showNetworkError()
+                    RequestState.Status.SERVER_ERROR -> stateLayout.showServerError()
+                    RequestState.Status.API_ERROR -> stateLayout.showServerError(it.msg)
+                    RequestState.Status.LOADING -> stateLayout.showLoading()
+                    RequestState.Status.SUCCESS -> stateLayout.showContent()
+                }
         })
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mViewModel?.closeRequest()
     }
 
     open fun requestState(requestState: RequestState) {}

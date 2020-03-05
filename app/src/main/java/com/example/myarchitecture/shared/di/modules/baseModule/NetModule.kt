@@ -79,7 +79,7 @@ class NetModule {
         override fun intercept(chain: Interceptor.Chain): Response {
             val original = chain.request()
 
-            val token = "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuYXJla25hcmVrNDEwMDFAZ21haWwuY29tIiwianRpIjoiMWM0Yjg2NjgtMDcxZi00MzJhLThhZmYtYzFlNTVhOTJiZTk2IiwiaWF0IjpbMjUsMjVdLCJ1c2VySWQiOiIxIiwicm9sZXMiOiJVc2VyIiwiRXhwaXJlRGF0ZSI6IjAyLzI5LzIwMjAgMTE6NTQ6MjUiLCJ2ZXJpZmllZEJ5IjoiRW1haWwiLCJuYmYiOjE1ODAzODUyNjUsImV4cCI6MTU4Mjk3NzI2NSwiaXNzIjoiQmFpdGttUHJvZHVjdGlvbiIsImF1ZCI6IkJhaXRrbVJlYWN0SnNXZWJBcHAifQ.Ww0IYEdeReIYK59BwnIz0WtXsg2ymrjtbe1sFwy83oY"
+            val token = "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuYXJla25hcmVrNDEwMDFAZ21haWwuY29tIiwianRpIjoiMTQ4ZmY5ZTgtNDU0NS00M2U2LWJhZGMtZTdlZGFiNzM1ZGE1IiwiaWF0Ijo0MSwidXNlcklkIjoiMSIsInJvbGVzIjoiVXNlciIsIkV4cGlyZURhdGUiOiIwNC8wNC8yMDIwIDA5OjQ0OjQxIiwidmVyaWZpZWRCeSI6IkVtYWlsIiwibmJmIjoxNTgzNDAxNDgxLCJleHAiOjE1ODU5OTM0ODEsImlzcyI6IkJhaXRrbVByb2R1Y3Rpb24iLCJhdWQiOiJCYWl0a21SZWFjdEpzV2ViQXBwIn0.OunTaNjCbT7HvMu-aYrQSA5TbrUHwYtSzDHEHtiuGR4"
 
 //            val token = "Bearer ${mShared.getStringSharedPreferences(AppConstants.TOKEN)}"
             val cacheControl = if (NetworkAvailable.isNetworkAvailable())

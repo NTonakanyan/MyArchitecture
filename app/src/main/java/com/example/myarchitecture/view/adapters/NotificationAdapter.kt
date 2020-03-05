@@ -16,6 +16,7 @@ class NotificationAdapter : PagedListAdapter<NotificationModel, RecyclerView.Vie
         private const val TYPE_PROGRESS = 0
         private const val TYPE_ITEM = 1
     }
+
     private var mRequestState: RequestState? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

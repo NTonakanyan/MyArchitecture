@@ -1,6 +1,5 @@
 package com.example.myarchitecture.view.baseView
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,8 +22,6 @@ open class BaseViewModel : ViewModel() {
 
     @Inject
     lateinit var mRequestLiveData: MutableLiveData<RequestState>
-    @Inject
-    lateinit var context: Context
     private val parentJob = Job()
     private val coroutineContext: CoroutineContext get() = parentJob + Dispatchers.Default
     val mScope = CoroutineScope(coroutineContext)
@@ -47,7 +44,7 @@ open class BaseViewModel : ViewModel() {
             .setEnablePlaceholders(false)
             .setPageSize(loadedItemCount)
             .build()
-        return LivePagedListBuilder<Int, T>(notificationDataDataSourceCreator, config).build()
+        return LivePagedListBuilder(notificationDataDataSourceCreator, config).build()
     }
 
     fun closeRequest() {

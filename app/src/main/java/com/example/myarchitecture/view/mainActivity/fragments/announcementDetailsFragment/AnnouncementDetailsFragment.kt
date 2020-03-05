@@ -10,6 +10,7 @@ import com.example.myarchitecture.databinding.AnnouncementDetailsBinding
 import com.example.myarchitecture.shared.di.scopes.PersonScope
 import com.example.myarchitecture.shared.utils.AppConstants
 import com.example.myarchitecture.view.baseView.BaseFragment
+import java.lang.NullPointerException
 
 class AnnouncementDetailsFragment : BaseFragment() {
 
@@ -22,6 +23,8 @@ class AnnouncementDetailsFragment : BaseFragment() {
         initSubscribers()
 
         mViewModel.getAnnouncementDetails(arguments?.getInt(AppConstants.ID))
+
+        mBinding.announcementDetailsPhoto.setOnClickListener { throw NullPointerException("Test") }
 
         return mBinding.root
     }

@@ -22,6 +22,7 @@ class AnnouncementFragment : BaseFragment() {
     private lateinit var mBinding: FragmentAnnouncementBinding
     private val mViewModel by viewModels<AnnouncementViewModel>()
     private var mAdapter: AnnouncementAdapter? = null
+    private lateinit var s: String
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = FragmentAnnouncementBinding.inflate(inflater, container, false)
@@ -37,7 +38,7 @@ class AnnouncementFragment : BaseFragment() {
     private fun initSubscribers() {
         requestSubscriber(mViewModel, mBinding.announcementStateLayout)
 
-        mViewModel.getAnnouncementsLiveData()?.observe(viewLifecycleOwner, Observer<PagedList<AnnouncementModel>> {
+        mViewModel.getAnnouncementsLiveData()?.observe(viewLifecycleOwner, Observer {
             mAdapter?.submitList(it)
         })
     }

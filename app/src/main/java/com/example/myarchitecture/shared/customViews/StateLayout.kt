@@ -78,6 +78,18 @@ class StateLayout : FrameLayout {
         message.text = "Server error"
     }
 
+    fun showServerError(msg: String?) {
+        container.visibility = View.VISIBLE
+        message.visibility = View.VISIBLE
+
+        mContent.visibility = View.GONE
+        progress.visibility = View.GONE
+        button.visibility = View.GONE
+        mContent.visibility = View.GONE
+
+        message.text = msg
+    }
+
     fun showEmpty() {
         container.visibility = View.VISIBLE
         message.visibility = View.VISIBLE

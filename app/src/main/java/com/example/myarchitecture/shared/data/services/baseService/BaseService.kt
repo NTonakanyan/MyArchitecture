@@ -5,9 +5,11 @@ import com.example.myarchitecture.App
 import com.example.myarchitecture.model.baseModels.ResponseModel
 import com.example.myarchitecture.shared.data.networking.NetworkAvailable
 import com.example.myarchitecture.shared.data.networking.RequestState
+import kotlinx.coroutines.isActive
 import retrofit2.Response
 import java.net.HttpURLConnection
 import javax.inject.Inject
+import kotlin.coroutines.coroutineContext
 
 open class BaseService {
 
@@ -41,10 +43,11 @@ open class BaseService {
             mRequestHandler.postValue(RequestState.createRequestState(RequestState.Status.SUCCESS, isMainRequest))
             return response.body()!!.data
         } catch (e: Throwable) {
-            if (NetworkAvailable.isNetworkAvailable())
-                mRequestHandler.postValue(RequestState.createRequestState(RequestState.Status.SERVER_ERROR, isMainRequest))
-            else
-                mRequestHandler.postValue(RequestState.createRequestState(RequestState.Status.NETWORK_ERROR, isMainRequest))
+            if (coroutineContext.isActive)
+                if (NetworkAvailable.isNetworkAvailable())
+                    mRequestHandler.postValue(RequestState.createRequestState(RequestState.Status.SERVER_ERROR, isMainRequest))
+                else
+                    mRequestHandler.postValue(RequestState.createRequestState(RequestState.Status.NETWORK_ERROR, isMainRequest))
             return null
         }
     }

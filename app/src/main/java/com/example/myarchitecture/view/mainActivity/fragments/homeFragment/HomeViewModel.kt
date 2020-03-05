@@ -1,13 +1,11 @@
 package com.example.myarchitecture.view.mainActivity.fragments.homeFragment
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagedList
 import com.example.myarchitecture.App
 import com.example.myarchitecture.model.baseModels.PaginationRequestModel
 import com.example.myarchitecture.model.baseModels.PaginationResponseModel
 import com.example.myarchitecture.model.notificationModels.NotificationModel
-import com.example.myarchitecture.shared.data.networking.RequestState
 import com.example.myarchitecture.shared.data.services.PersonService
 import com.example.myarchitecture.shared.di.scopes.PersonScope
 import com.example.myarchitecture.view.baseView.BaseViewModel

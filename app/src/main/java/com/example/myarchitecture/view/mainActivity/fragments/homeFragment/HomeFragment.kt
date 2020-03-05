@@ -47,9 +47,4 @@ class HomeFragment : BaseFragment() {
         if (!requestState.isRootLoading)
             mAdapter?.setNetworkState(requestState)
     }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        mViewModel.getLiveData().removeObservers(viewLifecycleOwner)
-    }
 }

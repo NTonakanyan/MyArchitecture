@@ -3,9 +3,10 @@ package com.example.myarchitecture
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Intent
+import com.armboldmind.exceptionlibrary.ExceptionHandler
 import com.example.myarchitecture.shared.di.components.PersonComponent
-import com.example.myarchitecture.shared.di.components.baseComponent.DaggerAppComponent
 import com.example.myarchitecture.shared.di.components.baseComponent.AppComponent
+import com.example.myarchitecture.shared.di.components.baseComponent.DaggerAppComponent
 import com.example.myarchitecture.shared.di.modules.PersonModule
 import com.example.myarchitecture.shared.di.modules.baseModule.AppModule
 import com.example.myarchitecture.shared.di.modules.baseModule.NetModule
@@ -15,6 +16,7 @@ import com.example.myarchitecture.view.mainActivity.MainActivity
 class App : Application() {
 
     private lateinit var mAppComponent: AppComponent
+
     companion object {
         lateinit var instance: App
     }
@@ -22,6 +24,7 @@ class App : Application() {
     @SuppressLint("CheckResult")
     override fun onCreate() {
         super.onCreate()
+        ExceptionHandler.init(this)
         instance = this
 
         mAppComponent = DaggerAppComponent.builder()
