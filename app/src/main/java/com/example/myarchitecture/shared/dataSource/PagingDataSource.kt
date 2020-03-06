@@ -28,8 +28,6 @@ class PagingDataSource<T>(private val mScope: CoroutineScope,
                 callback.run { onResult(response.data, null, NEXT_PAGE) }
                 if (response.data.isEmpty())
                     mRequestHandler.postValue(RequestState(true, RequestState.Status.EMPTY, null))
-                else
-                    mRequestHandler.postValue(RequestState(true, RequestState.Status.SUCCESS, null))
             }
         }
     }

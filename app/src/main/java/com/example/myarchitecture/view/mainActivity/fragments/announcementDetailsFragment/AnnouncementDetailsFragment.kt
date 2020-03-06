@@ -7,22 +7,23 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.example.myarchitecture.databinding.AnnouncementDetailsBinding
-import com.example.myarchitecture.shared.di.scopes.PersonScope
 import com.example.myarchitecture.shared.utils.AppConstants
 import com.example.myarchitecture.view.baseView.BaseFragment
-import java.lang.NullPointerException
 
 class AnnouncementDetailsFragment : BaseFragment() {
 
     private lateinit var mBinding: AnnouncementDetailsBinding
     private val mViewModel by viewModels<AnnouncementDetailsViewModel>()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mViewModel.getAnnouncementDetails(arguments?.getInt(AppConstants.ID))
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = AnnouncementDetailsBinding.inflate(inflater, container, false)
 
         initSubscribers()
-
-        mViewModel.getAnnouncementDetails(arguments?.getInt(AppConstants.ID))
 
         mBinding.announcementDetailsPhoto.setOnClickListener { throw NullPointerException("Test") }
 

@@ -2,6 +2,7 @@ package com.example.myarchitecture.view.mainActivity.fragments.announcementDetai
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.myarchitecture.App
 import com.example.myarchitecture.model.announcementModels.AnnouncementDetailsModel
 import com.example.myarchitecture.shared.data.services.PersonService
@@ -24,8 +25,8 @@ class AnnouncementDetailsViewModel : BaseViewModel() {
     }
 
     fun getAnnouncementDetails(id: Int?) {
-        mScope.launch(EmptyCoroutineContext, CoroutineStart.DEFAULT) {
-            announcementLiveData.postValue(mService.getAnnouncementDetails(id, true))
+        viewModelScope.launch(EmptyCoroutineContext, CoroutineStart.DEFAULT) {
+            announcementLiveData.postValue(mService.getAnnouncementDetails(id, true, mRequestLiveData))
         }
     }
 

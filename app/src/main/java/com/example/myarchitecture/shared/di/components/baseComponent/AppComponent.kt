@@ -30,5 +30,5 @@ interface AppComponent {
 
     fun iPersonComponent(module: PersonModule): PersonComponent
 
-    fun requestStateLiveData(): MutableLiveData<RequestState>
+//    fun requestStateLiveData(): MutableLiveData<RequestState>
 }

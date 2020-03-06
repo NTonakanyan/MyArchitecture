@@ -7,7 +7,7 @@ import com.bumptech.glide.request.RequestOptions
 
 object CurrencyBindingAdapter {
     @JvmStatic
-    @BindingAdapter("android:src")
+    @BindingAdapter("android:glideSrc")
     fun setImageUrl(view: ImageView, url: String?) {
         Glide.with(view.context).load(url).apply { RequestOptions().centerCrop() }.into(view)
     }

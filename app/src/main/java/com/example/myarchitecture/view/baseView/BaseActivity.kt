@@ -10,6 +10,6 @@ open class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ExceptionHandler.setUCEHandler()
+        ExceptionHandler.setExceptionHandler()
     }
 }

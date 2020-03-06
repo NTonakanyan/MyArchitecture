@@ -1,5 +1,6 @@
 package com.example.myarchitecture.view.baseView
 
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.example.myarchitecture.shared.customViews.StateLayout
@@ -13,23 +14,23 @@ open class BaseFragment : Fragment() {
     fun <T : BaseViewModel> requestSubscriber(viewModel: T, stateLayout: StateLayout) {
         mViewModel = viewModel
         viewModel.getLiveData().observe(viewLifecycleOwner, Observer {
+            Log.e("Error", it.isMainRequest.toString())
             requestState(it)
-            if (it.isRootLoading)
-                when (it.status) {
-                    RequestState.Status.EMPTY -> stateLayout.showEmpty()
-                    RequestState.Status.NETWORK_ERROR -> stateLayout.showNetworkError()
-                    RequestState.Status.SERVER_ERROR -> stateLayout.showServerError()
-                    RequestState.Status.API_ERROR -> stateLayout.showServerError(it.msg)
-                    RequestState.Status.LOADING -> stateLayout.showLoading()
-                    RequestState.Status.SUCCESS -> stateLayout.showContent()
-                }
+            when (it.status) {
+                RequestState.Status.EMPTY -> stateLayout.showEmpty(it)
+                RequestState.Status.NETWORK_ERROR -> stateLayout.showNetworkError(it)
+                RequestState.Status.SERVER_ERROR -> stateLayout.showServerError(it)
+                RequestState.Status.API_ERROR -> stateLayout.showServerError(it)
+                RequestState.Status.LOADING -> stateLayout.showLoading(it)
+                RequestState.Status.SUCCESS -> stateLayout.showContent(it)
+            }
         })
     }
+
+    open fun requestState(requestState: RequestState) {}
 
     override fun onDestroyView() {
         super.onDestroyView()
         mViewModel?.closeRequest()
     }
-
-    open fun requestState(requestState: RequestState) {}
 }

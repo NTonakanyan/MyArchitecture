@@ -1,6 +1,7 @@
 package com.example.myarchitecture.view.mainActivity.fragments.announcementFragment
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.paging.PagedList
 import com.example.myarchitecture.App
 import com.example.myarchitecture.model.announcementModels.AnnouncementModel
@@ -16,18 +17,24 @@ class AnnouncementViewModel : BaseViewModel() {
 
     @Inject
     lateinit var mService: PersonService
-    private var announcementsLiveData: LiveData<PagedList<AnnouncementModel>>? = null
+    private var announcementsLiveData = MediatorLiveData<PagedList<AnnouncementModel>>()
 
     init {
         App.instance.getPersonComponent().inject(this)
     }
 
-    fun getAnnouncementsLiveData(): LiveData<PagedList<AnnouncementModel>>? {
-        return announcementsLiveData
+    fun getAnnouncements(isMainRequest: Boolean = true) {
+        val function: suspend (PaginationRequestModel, Boolean) -> PaginationResponseModel<List<AnnouncementModel>>? = { it1, it2 ->
+            mService.getSuggestedAnnouncementList(it1, if (isMainRequest) it2 else isMainRequest, mRequestLiveData)
+        }
+        val ld = initPaginationDataSours(function)
+        announcementsLiveData.addSource(ld) {
+            announcementsLiveData.postValue(it)
+            announcementsLiveData.removeSource(ld)
+        }
     }
 
-    fun getAnnouncements() {
-        val function: suspend (PaginationRequestModel, Boolean) -> PaginationResponseModel<List<AnnouncementModel>>? = { it1, it2 -> mService.getSuggestedAnnouncementList(it1, it2) }
-        announcementsLiveData = initPaginationDataSours(function)
+    fun getAnnouncementsLiveData(): LiveData<PagedList<AnnouncementModel>> {
+        return announcementsLiveData
     }
 }

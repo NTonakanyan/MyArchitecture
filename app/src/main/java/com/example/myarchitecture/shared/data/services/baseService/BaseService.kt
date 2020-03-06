@@ -8,19 +8,16 @@ import com.example.myarchitecture.shared.data.networking.RequestState
 import kotlinx.coroutines.isActive
 import retrofit2.Response
 import java.net.HttpURLConnection
-import javax.inject.Inject
 import kotlin.coroutines.coroutineContext
 
 open class BaseService {
 
-    @Inject
-    lateinit var mRequestHandler: MutableLiveData<RequestState>
 
     init {
         App.instance.getPersonComponent().inject(this)
     }
 
-    suspend fun <T> callAsync(isMainRequest: Boolean, method: suspend () -> Response<ResponseModel<T>>): T? {
+    suspend fun <T> callAsync(mRequestHandler: MutableLiveData<RequestState>, isMainRequest: Boolean, method: suspend () -> Response<ResponseModel<T>>): T? {
         try {
             mRequestHandler.postValue(RequestState(isMainRequest, RequestState.Status.LOADING, null))
             val response = method()

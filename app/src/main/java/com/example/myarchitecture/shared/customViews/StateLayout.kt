@@ -5,7 +5,9 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.myarchitecture.databinding.StateLayoutBinding
+import com.example.myarchitecture.shared.data.networking.RequestState
 
 
 class StateLayout : FrameLayout {
@@ -38,14 +40,21 @@ class StateLayout : FrameLayout {
         button = mBinding.layoutStateButton
     }
 
-    fun showContent() {
+    fun showContent(requestState: RequestState) {
+        if (mContent is SwipeRefreshLayout)
+            (mContent as SwipeRefreshLayout).isRefreshing = false
+        if (!isMainRequest(requestState))
+            return
         container.visibility = View.GONE
         mContent.visibility = View.VISIBLE
         mContent.alpha = 0f
         mContent.animate().alpha(1f).setDuration(300).start()
+
     }
 
-    fun showLoading() {
+    fun showLoading(requestState: RequestState) {
+        if (!isMainRequest(requestState))
+            return
         container.visibility = View.VISIBLE
         progress.visibility = View.VISIBLE
 
@@ -54,7 +63,9 @@ class StateLayout : FrameLayout {
         mContent.visibility = View.GONE
     }
 
-    fun showNetworkError() {
+    fun showNetworkError(requestState: RequestState) {
+        if (!isMainRequest(requestState))
+            return
         container.visibility = View.VISIBLE
         message.visibility = View.VISIBLE
 
@@ -66,7 +77,9 @@ class StateLayout : FrameLayout {
         message.text = "Network error"
     }
 
-    fun showServerError() {
+    fun showServerError(requestState: RequestState) {
+        if (!isMainRequest(requestState))
+            return
         container.visibility = View.VISIBLE
         message.visibility = View.VISIBLE
 
@@ -75,22 +88,12 @@ class StateLayout : FrameLayout {
         button.visibility = View.GONE
         mContent.visibility = View.GONE
 
-        message.text = "Server error"
+        message.text = requestState.msg ?: "Server error"
     }
 
-    fun showServerError(msg: String?) {
-        container.visibility = View.VISIBLE
-        message.visibility = View.VISIBLE
-
-        mContent.visibility = View.GONE
-        progress.visibility = View.GONE
-        button.visibility = View.GONE
-        mContent.visibility = View.GONE
-
-        message.text = msg
-    }
-
-    fun showEmpty() {
+    fun showEmpty(requestState: RequestState) {
+        if (!isMainRequest(requestState))
+            return
         container.visibility = View.VISIBLE
         message.visibility = View.VISIBLE
 
@@ -101,4 +104,6 @@ class StateLayout : FrameLayout {
 
         message.text = "Empty"
     }
+
+    private fun isMainRequest(requestState: RequestState) = requestState.isMainRequest
 }

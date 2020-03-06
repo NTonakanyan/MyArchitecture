@@ -16,35 +16,47 @@ class HomeFragment : BaseFragment() {
 
     private lateinit var mBinding: FragmentHomeBinding
     private val mViewModel by viewModels<HomeViewModel>()
-    private var mAdapter: NotificationAdapter? = null
+    private val mAdapter: NotificationAdapter = NotificationAdapter()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mViewModel.getNotifications()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = FragmentHomeBinding.inflate(inflater, container, false)
-        mViewModel.getNotifications()
 
         initAdapter()
 
         initSubscribers()
 
+        initView()
+
         return mBinding.root
+    }
+
+    private fun initView() {
+        mBinding.mainSwipeRefresh.setOnRefreshListener {
+            mViewModel.getNotifications(false)
+        }
     }
 
     private fun initSubscribers() {
         requestSubscriber(mViewModel, mBinding.homeStateLayout)
 
-        mViewModel.getNotificationLiveData()?.observe(super.getViewLifecycleOwner(), Observer {
-            mAdapter?.submitList(it)
+        mViewModel.getNotificationLiveData().observe(super.getViewLifecycleOwner(), Observer {
+            if (mAdapter.itemCount == 0)
+                mAdapter.submitList(it)
         })
     }
 
     private fun initAdapter() {
-        mAdapter = NotificationAdapter()
         mBinding.mainRecyclerView.layoutManager = LinearLayoutManager(mActivity)
         mBinding.mainRecyclerView.adapter = mAdapter
     }
 
     override fun requestState(requestState: RequestState) {
-        if (!requestState.isRootLoading)
-            mAdapter?.setNetworkState(requestState)
+        if (!requestState.isMainRequest)
+            mAdapter.setNetworkState(requestState)
     }
 }

@@ -66,11 +66,11 @@ class NetModule {
             .build()
     }
 
-    @Provides
-    @Singleton
-    internal fun provideMutableLiveData(): MutableLiveData<RequestState> {
-        return MutableLiveData()
-    }
+//    @Provides
+//    @Singleton
+//    internal fun provideMutableLiveData(): MutableLiveData<RequestState> {
+//        return MutableLiveData()
+//    }
 
     inner class CustomInterceptor internal constructor(private val mShared: SharedPreferencesHelper,
                                                        private val mApplication: Application) : Interceptor {

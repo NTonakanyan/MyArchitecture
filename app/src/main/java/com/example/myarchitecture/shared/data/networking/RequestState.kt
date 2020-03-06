@@ -1,6 +1,6 @@
 package com.example.myarchitecture.shared.data.networking
 
-open class RequestState(val isRootLoading: Boolean = false, val status: Status, val msg: String?) {
+open class RequestState(val isMainRequest: Boolean = false, val status: Status, val msg: String?) {
 
     enum class Status {
         NETWORK_ERROR,

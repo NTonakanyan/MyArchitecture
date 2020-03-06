@@ -1,6 +1,6 @@
 package com.example.myarchitecture.view.mainActivity.fragments.homeFragment
 
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.paging.PagedList
 import com.example.myarchitecture.App
 import com.example.myarchitecture.model.baseModels.PaginationRequestModel
@@ -16,18 +16,24 @@ class HomeViewModel : BaseViewModel() {
 
     @Inject
     lateinit var mService: PersonService
-    private var notificationLiveData: LiveData<PagedList<NotificationModel>>? = null
+    private var notificationLiveData = MediatorLiveData<PagedList<NotificationModel>>()
 
     init {
         App.instance.getPersonComponent().inject(this)
     }
 
-    fun getNotifications() {
-        val function: suspend (PaginationRequestModel, Boolean) -> PaginationResponseModel<List<NotificationModel>>? = { it1, it2 -> mService.getNotificationsList(it1, it2) }
-        notificationLiveData = initPaginationDataSours(function)
+    fun getNotifications(isMainRequest: Boolean = true) {
+        val function: suspend (PaginationRequestModel, Boolean) -> PaginationResponseModel<List<NotificationModel>>? = { it1, it2 ->
+            mService.getNotificationsList(it1, if (isMainRequest) it2 else isMainRequest, mRequestLiveData)
+        }
+        val ld = initPaginationDataSours(function)
+        notificationLiveData.addSource(ld) {
+            notificationLiveData.postValue(it)
+            notificationLiveData.removeSource(ld)
+        }
     }
 
-    fun getNotificationLiveData(): LiveData<PagedList<NotificationModel>>? {
+    fun getNotificationLiveData(): MediatorLiveData<PagedList<NotificationModel>> {
         return notificationLiveData
     }
 }
