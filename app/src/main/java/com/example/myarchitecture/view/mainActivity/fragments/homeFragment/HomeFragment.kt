@@ -45,8 +45,7 @@ class HomeFragment : BaseFragment() {
         requestSubscriber(mViewModel, mBinding.homeStateLayout)
 
         mViewModel.getNotificationLiveData().observe(super.getViewLifecycleOwner(), Observer {
-            if (mAdapter.itemCount == 0)
-                mAdapter.submitList(it)
+            mAdapter.submitList(it)
         })
     }
 
