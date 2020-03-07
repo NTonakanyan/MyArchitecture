@@ -26,7 +26,7 @@ class PagingDataSource<T>(private val mScope: CoroutineScope,
             val response = mMethod(model, true)
             if (response?.data != null) {
                 val nextKey = if (model.page == response.pageCount) null else NEXT_PAGE
-                callback.onResult(response.data,null, nextKey)
+                callback.onResult(response.data, null, nextKey)
                 if (response.data.isEmpty())
                     mRequestHandler.postValue(RequestState(true, RequestState.Status.EMPTY, null))
             }

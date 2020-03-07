@@ -1,6 +1,5 @@
 package com.example.myarchitecture.view.baseView
 
-import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.example.myarchitecture.shared.customViews.StateLayout
@@ -14,7 +13,6 @@ open class BaseFragment : Fragment() {
     fun <T : BaseViewModel> requestSubscriber(viewModel: T, stateLayout: StateLayout) {
         mViewModel = viewModel
         viewModel.getLiveData().observe(viewLifecycleOwner, Observer {
-            Log.e("Error", it.isMainRequest.toString())
             requestState(it)
             when (it.status) {
                 RequestState.Status.EMPTY -> stateLayout.showEmpty(it)

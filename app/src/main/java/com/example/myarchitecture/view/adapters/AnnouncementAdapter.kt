@@ -42,7 +42,7 @@ class AnnouncementAdapter : PagedListAdapter<AnnouncementModel, RecyclerView.Vie
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (position == itemCount - 1 && mRequestState?.status != RequestState.Status.SUCCESS)
+        return if (position == itemCount - 1 && mRequestState?.status != null && mRequestState?.status != RequestState.Status.SUCCESS)
             TYPE_PROGRESS
         else
             TYPE_ITEM

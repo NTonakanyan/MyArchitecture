@@ -27,7 +27,7 @@ class AnnouncementViewModel : BaseViewModel() {
         val function: suspend (PaginationRequestModel, Boolean) -> PaginationResponseModel<List<AnnouncementModel>>? = { it1, it2 ->
             mService.getSuggestedAnnouncementList(it1, if (isMainRequest) it2 else isMainRequest, mRequestLiveData)
         }
-        val ld = initPaginationDataSours(function)
+        val ld = initPaginationDataSours(function,2)
         announcementsLiveData.addSource(ld) {
             announcementsLiveData.postValue(it)
             announcementsLiveData.removeSource(ld)

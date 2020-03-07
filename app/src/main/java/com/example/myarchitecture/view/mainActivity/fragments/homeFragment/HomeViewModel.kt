@@ -26,7 +26,7 @@ class HomeViewModel : BaseViewModel() {
         val function: suspend (PaginationRequestModel, Boolean) -> PaginationResponseModel<List<NotificationModel>>? = { it1, it2 ->
             mService.getNotificationsList(it1, if (isMainRequest) it2 else isMainRequest, mRequestLiveData)
         }
-        val ld = initPaginationDataSours(function)
+        val ld = initPaginationDataSours(function,1)
         notificationLiveData.addSource(ld) {
             notificationLiveData.postValue(it)
             notificationLiveData.removeSource(ld)

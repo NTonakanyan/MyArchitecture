@@ -6,7 +6,6 @@ class NotificationModel {
 
     var id: Int = 0
     var title: String? = null
-    var isNextPage: Boolean = true
 
     init {
         id = id++
@@ -34,7 +33,6 @@ class NotificationModel {
     override fun hashCode(): Int {
         var result = id
         result = 31 * result + (title?.hashCode() ?: 0)
-        result = 31 * result + isNextPage.hashCode()
         return result
     }
 }
